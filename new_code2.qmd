@@ -1,0 +1,758 @@
+---
+title: "Modeling of yield losses caused by the corn stunt disease complex "
+author: "Marcelo Gonçalves"
+warning: false
+message: false
+format: html
+editor: visual
+---
+
+# Dependencies
+
+Let's load all the packages we will use in the analyses below. Make sure all packages are installed beforehand. If you don't have them installed yet, you can install them from the CRAN repository.
+
+```{r}
+library(tidyverse)
+library(gsheet)
+library(ggplot2)
+library(patchwork)
+library(ggthemes)
+library(metafor)
+library(psych)
+library(broom)
+library(lme4)
+library(car)
+```
+
+# Data import
+
+First, we import two datasets from Google Sheets. `cs_data` contains the main dataset, while `tabela2` includes additional information for joining.
+
+First, we import two datasets from Google Sheets. `cs_data` contains the main dataset, while `tabela2` includes additional information for joining. Next, we filter the data to remove rows with missing values and high total spots, and adjust the dataset for the subsequent analyses.
+
+Since the severity scale does not include zero and a score of one represents the absence of the disease, we subtract 1 from the scale so that disease-free cases correspond to 0. This adjustment ensures that the intercept represents the attainable yield.
+
+```{r}
+cs_data <- gsheet2tbl(
+  "https://docs.google.com/spreadsheets/d/1Q6ES9jfpAwq1apyz7OpyT4X3aYyN_gSyFPkg9x6xar4/edit?gid=0#gid=0")
+tabela2 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1Q6ES9jfpAwq1apyz7OpyT4X3aYyN_gSyFPkg9x6xar4/edit?gid=1802319739#gid=1802319739")
+
+exp1 <- cs_data |> 
+  filter(!is.na(prod),
+         !is.na(enfez),
+         enfez <= 6,
+         manchas_totais < 5) |> 
+  mutate(prod_class = ifelse(prod > 6377, "alta", "baixa")) |> 
+  left_join(tabela2, by = "cultivar")
+
+
+sev_dif <- exp1 |> 
+  mutate(enfez = enfez - 1)
+
+
+data1 <- sev_dif |> 
+  group_by(estudo, tolerance_ad, cultivar, rep, cidade, ano, ensaio, prod_class, manchas_totais) |> 
+  summarize(prod = prod,
+            sev = enfez) |> 
+  mutate(trial = interaction(cidade, ano, ensaio)) 
+
+```
+
+# Exploratory Data Analysis
+
+Exploratory analyses were performed to check the data distribution. We used histograms and boxplots to provide a better description and visualization of the data.
+
+### Median
+
+```{r}
+ef_median <- exp1 |> 
+  group_by(estudo, ano, cultivar) |> 
+  summarise(mean_sev = mean(enfez),
+            mean_yld = mean(prod),
+            median_sev = median(enfez),
+            median_prod = median(prod))
+
+
+ef_median |> 
+  group_by(ano) |> 
+  summarise(median_sev = mean(median_sev),
+            median_prod = mean(median_prod))
+```
+
+```{r}
+summary(ef_median)
+```
+
+### Histogram
+
+```{r}
+dist_sev <- ef_median |>
+  ggplot(aes(median_sev)) +
+  geom_histogram(bins = 10, 
+                 fill = "#3A5FCD",
+                 color = "darkblue",
+                 linewidth = 0.5) +
+  labs(x = "Severity  score", y = "") +
+  geom_vline(xintercept = 3.637, size = 1.3, linetype = 2)+
+  theme_bw()
+
+
+dist_prod<- ef_median |>
+  ggplot(aes(median_prod)) +
+  geom_histogram(bins = 20, fill = "#3A5FCD",
+                 color = "darkblue",
+                 linewidth = 0.5) +
+  labs(x = "Yield (kg/ha)", y = "") +
+   geom_vline(xintercept = 6270, size = 1.3, linetype = 2)+
+  theme_bw()
+```
+
+### Boxplot
+
+```{r}
+box_sev <- ef_median |>
+  ggplot(aes(factor(ano), median_sev)) +
+  geom_boxplot(outlier.shape = NA, fill = "#3A5FCD", color = "darkblue") +
+  theme_bw() +
+  labs(x = "Second crop season", y = "Severity score")
+
+
+
+box_prod<- ef_median |>
+  ggplot(aes(factor(ano), median_prod)) +
+  geom_boxplot(outlier.shape = NA, fill = "#3A5FCD", color = "darkblue") +
+  theme_bw() +
+  labs(x = "Second crop season", y = "Yield (kg/ha)")
+
+```
+
+Final figure used in the article.
+
+```{r}
+Fig2 <- (dist_sev | box_sev)/
+(dist_prod | box_prod) +
+  plot_annotation(tag_levels = "A")
+Fig2
+```
+
+### Individual regressions
+
+Individual regression analyses were performed for each of the 22 studies to examine the trend in the relationship between the two variables (CSCD severity and corn yield).
+
+```{r}
+gc1 <- ef_median |> 
+  ggplot(aes(mean_sev, mean_yld))+
+  geom_smooth(method = "lm", se = FALSE, color = "#3A5FCD", fullrange = TRUE) +
+  geom_point(color = "black", shape = 1) + 
+  theme_bw() +
+  facet_wrap(~estudo,
+             ncol = 6) +
+  labs(y = "Yield (Kg/ha)",x = "Severity score")
+
+gc1
+```
+
+### Individual correlation
+
+We also performed individual correlation analyses for the 22 studies and applied the Fisher Z-transformation.
+
+```{r}
+correlation_data <- data1 |> 
+  group_by(estudo) |> 
+  summarise(r_sev_yld = cor(sev, prod), 
+            n = n(), 
+            Z_sev_yld = 0.5*log((1+r_sev_yld)/(1-r_sev_yld)), 
+            V = 1/(n-3), 
+            vd_sev_yld = 1/(2*(1-r_sev_yld)/n-3)) |>  
+  filter(r_sev_yld != "NA") |> 
+  filter(n > 4)
+
+
+summary(correlation_data)
+```
+
+Individual values were plotted to improve visualization.
+
+```{r}
+r <- correlation_data %>% 
+  ggplot(aes(r_sev_yld)) +
+  geom_histogram(bins = 10,
+                 color = "black",
+                 fill = "grey85",
+                 alpha = 0.5,
+                 linewidth = 1) +
+  theme_bw()+
+  ylab("Frequency") +
+  xlab(expression("Pearson's coefficient")) +
+    theme(
+    axis.title.x = element_text(size = 20), 
+    axis.title.y = element_text(size = 20), 
+    axis.text.x = element_text(size = 16),   
+    axis.text.y = element_text(size = 16))
+
+z <- correlation_data %>% 
+  ggplot(aes(Z_sev_yld))+
+  geom_histogram(bins = 10,
+                 color = "black",
+                 fill = "grey85",
+                 alpha = 0.5,
+                 linewidth = 1) +
+  theme_bw()+
+  ylab("Frequency") +
+  xlab(expression("Fisher's " * "" * italic(Z) * "")) +
+    theme(
+    axis.title.x = element_text(size = 20), 
+    axis.title.y = element_text(size = 20), 
+    axis.text.x = element_text(size = 16),   
+    axis.text.y = element_text(size = 16))
+
+```
+
+```{r}
+fit_all <- sev_dif |> 
+  group_by(estudo) |> 
+  do(tidy(lm(.$prod ~ .$enfez), conf.int=TRUE))
+
+summary(fit_all)
+```
+
+```{r}
+Intercepts <- fit_all |> 
+  filter(term == "(Intercept)")
+
+Slopes <-  fit_all |> 
+  filter(term == ".$enfez")
+```
+
+```{r}
+summary(Slopes)
+```
+
+```{r}
+b0 <- fit_all |> 
+  filter(term == "(Intercept)") |> 
+  ggplot(aes(x = estimate))+
+  geom_histogram(bins = 15, color = "black", fill = "grey85", alpha = 0.5, size = 1)+
+  theme_bw()+
+  labs(x = "Intercept", y = "Frequency") +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    axis.text.x = element_text(size = 16),   
+    axis.text.y = element_text(size = 16))
+
+b1 <- fit_all |> 
+  filter(term == ".$enfez") |> 
+  ggplot(aes(x = estimate))+
+  geom_histogram(bins = 15, color = "black", fill = "grey85", alpha = 0.5, size = 1)+
+    #geom_vline(xintercept = -60.2210    , size = 1.5, linetype = 2, color = "black")+
+  theme_bw()+
+  labs(x = "Slope", y = "Frequency")+
+   theme(
+    axis.title.x = element_text(size = 20), 
+    axis.title.y = element_text(size = 20), 
+    axis.text.x = element_text(size = 16),   
+    axis.text.y = element_text(size = 16))
+```
+
+Final figure used in the article
+
+```{r}
+fs1 = (r+z)/(b0+b1) + plot_annotation(tag_levels = "A") 
+fs1
+```
+
+# **Mixed-effects model**
+
+We fitted a mixed-effects model to estimate the effect of severity on yield, including random slopes and intercepts for each study to account for variation among studies.
+
+```{r}
+mm1 <- lmer(prod ~ sev  + (sev | estudo), data = data1,
+            REML = F)
+summary(mm1)
+```
+
+We extracted the variance from the random effects of the mixed-effects model and obtained the residual variance. Using the intercept and slope variances, we calculated τ² (total variance of the random effects) and then computed I² to quantify the proportion of total variability due to heterogeneity between studies.
+
+```{r}
+# Extracting variance from random effects
+random_effects_variance <- VarCorr(mm1)
+
+# Accessing the variance/covariance matrix of the 'cod' group
+var_random_effects <- random_effects_variance$estudo
+
+# Residual variance (error)
+sigma2 <- sigma(mm1)^2
+
+# τ² (variance of random effects)
+# The variance of the intercept is in the first row and column
+var_intercept <- var_random_effects[1, 1]
+
+# The slope variance is in the second row and column
+var_slope <- var_random_effects[2, 2]
+
+# Calculate I²
+tau2 <- var_intercept + var_slope  # Total variance of random effects
+I2 <- (tau2 / (tau2 + sigma2)) * 100  # Calculation of I²
+
+I2
+```
+
+We calculate confidence intervals for the mixed-effects model undefinedsing the profile likelihood
+
+```{r}
+confint(mm1, method = "profile")  # Interval based on likelihood profile
+```
+
+Data distribution from individual analyses of 22 studies. Blue points represent observed data, and gray lines indicate individual linear regressions.
+
+```{r}
+
+fig3a <- ggplot() +
+  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
+  scale_y_continuous(breaks = seq(0, 14000, by = 2000), limits = c(0, 14000)) +
+  geom_abline(aes(slope = Slopes$estimate, intercept = Intercepts$estimate), 
+              size = 1, alpha = 0.5, color = "darkgray") +
+ geom_point(data = ef_median, aes(x = mean_sev-1, y = mean_yld),
+             color = "#3A5FCD", shape = 16, alpha = 0.3) +
+  labs(x = "Scale score -1", y = "Yield (kg/ha)") +
+  theme_bw() +
+  theme(text = element_text(size = 20),
+        axis.text.x = element_text(size = 18),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(hjust = 0.5, size = 18))
+fig3a
+
+```
+
+Meta-analysis using a mixed-effects model. Blue line represents the average estimated relationship (common slope), and black dashed lines indicate the 95% confidence interval for the average regression.
+
+```{r}
+r_regression_misto <- data.frame(
+  estimate = c(8229.026, -1043.024),
+  low = c(7050.872811 , -1217.903252),
+  high = c(9342.37841711, -869.23656135)
+)
+
+fig3b <- ggplot() +
+  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
+  scale_y_continuous(breaks = seq(0, 14000, by = 2000), limits = c(0, 14000)) +
+  geom_abline(data = r_regression_misto, 
+              aes(slope = estimate[2], intercept = estimate[1]), 
+              size = 1.5, color = "#3A5FCD") +
+  geom_abline(data = r_regression_misto, 
+              aes(intercept = high[1], slope = high[2]), 
+              size = 1.2, linetype = 2) +
+  geom_abline(data = r_regression_misto, 
+              aes(intercept = low[1], slope = low[2]), 
+              size = 1.2, linetype = 2) +
+  labs(x = "Scale score -1", y = "Yield (kg/ha)") +
+  theme_bw() +
+  theme(text = element_text(size = 20),
+        axis.text.x = element_text(size = 18),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(hjust = 0.5, size = 18))
+fig3b
+```
+
+Calculation of damage when the disease reaches the maximum severity score.
+
+```{r}
+# 8229.026   -1043.024 
+y1 = 8229.03
+
+y6 = 8229.03 + (-1043.02 * 5)
+
+
+max_damage = ((y1 - y6) / y1) * 100
+max_damage
+```
+
+Calculation of the damage coefficient
+
+```{r}
+
+per_unit_loss = -1043.024 / y1 * 100
+per_unit_loss
+```
+
+# Creation of susceptibility levels
+
+We fitted a mixed-effects model for severity, considering random effects of hybrid, year, study, and their interaction, and extracted BLUPs for each hybrid. The BLUPs were scaled, and a Euclidean distance matrix was calculated to perform hierarchical clustering using Ward’s method. The dendrogram was cut into two groups, classifying hybrids with higher BLUPs as susceptible and those with lower BLUPs as moderately susceptible, and the results were visualized for interpretation.
+
+```{r}
+# Ensure factors
+df <- data1 |> 
+  mutate(
+    HYBRID = as.factor(cultivar),
+    YEAR = as.factor(ano),
+    LOC = as.factor(estudo),
+    REP = as.factor(rep)
+  )
+
+# Fit mixed model: random effect for HYBRID, optionally random LOC:YEAR
+model <- lmer(sev ~ (1|HYBRID) + (1|YEAR) + (1|LOC) + (1|LOC:YEAR), data = df)
+
+blups <- ranef(model)$HYBRID |> 
+  rownames_to_column("HYBRID") |> 
+  rename(BLUP = '(Intercept)') |> 
+  arrange(BLUP)
+
+blups2 <- ranef(model)$HYBRID |> 
+  rownames_to_column("HYBRID") |> 
+  rename(BLUP = '(Intercept)') |> 
+  arrange(BLUP)
+
+# Assuming 'blups' contains HYBRID and BLUP columns from lmer
+blup_matrix <- blups |> 
+  column_to_rownames("HYBRID")
+
+# Scale the BLUPs (optional but common in clustering)
+blup_scaled <- scale(blup_matrix)
+
+# Compute distance and apply hierarchical clustering
+dist_blup <- dist(blup_scaled)
+clust <- hclust(dist_blup, method = "ward.D2")
+
+# Cut the tree into 2 groups
+blups$GROUP <- cutree(clust, k = 2)
+
+# Optional: sort for interpretation
+blups <- blups  |> 
+  arrange(BLUP) |> 
+  mutate(cultivar = HYBRID) |> 
+  select(cultivar, GROUP)
+
+blups_final <- left_join(blups, blups2, by = c("cultivar" = "HYBRID"))
+
+
+# View the clustered groups
+print(blups)
+
+fig_blups <- factoextra::fviz_dend(
+  clust,
+  k = 2,                                # number of groups
+  rect = FALSE,                          # draw rectangles around groups
+  rect_fill = TRUE,                     # fill the rectangles
+  rect_border = "gray30",              # color of the rectangle borders
+  cex = 0.8,                            # size of the label text
+  k_colors = c("#3A5FCD", "red"),      # colors of the groups
+  color_labels_by_k = TRUE,            # color labels according to groups
+  labels_track_height = 0.8,           # height of the label track
+  horiz = TRUE,
+  main = " ",
+  ) +  labs(y = "Euclidean distance ") +
+  theme(axis.text.x = element_text(size = 18),
+        axis.title.x = element_text(size = 20) # increase numbers on the Y axis
+  ) +
+  theme_bw()
+print(fig_blups)
+
+```
+
+Data preparation
+
+```{r}
+data2 <- left_join(data1, blups)
+
+
+data3 <- data2 |> 
+  group_by(estudo, tolerance_ad, cultivar, GROUP, prod_class) |> 
+  summarize(sev = mean(sev),
+            prod = mean(prod))
+
+
+```
+
+```{r}
+# Fit random coefficients model: varying intercept and slope by STUDY
+
+df <- data3 |> 
+  mutate(GROUP = factor(GROUP),
+         STUDY = factor(estudo))  # If not already a factor
+
+
+model0 <- lmer(prod ~ sev  + (sev | STUDY), data = df)
+model <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df)
+anova(model0, model)
+car::Anova(model)
+
+# Random effect structure
+ranef(model)
+
+# Optional: extract slope and intercept per STUDY
+coef(model)$STUDY
+
+
+```
+
+# Moderators
+
+### Susceptibility levels used as a moderator
+
+Adding the interaction between severity and susceptibility group did not improve the model fit, indicating that severity affects production similarly across groups.
+
+```{r}
+# susceptibility levels
+
+model_full <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df)
+model_no_interaction <- lmer(prod ~ sev + GROUP + (sev | STUDY), data = df)
+model_no_group <- lmer(prod ~ sev + (sev | STUDY), data = df)
+anova(model_no_group, model_no_interaction, model_full)
+
+```
+
+### Tolerance group used as a moderator
+
+Adding the interaction between severity andtolerance group did not improve the model fit, indicating that severity affects production similarly across groups.
+
+```{r}
+# tolerance group
+df2 <- data1 |> 
+  mutate(tolerance_ad = factor(tolerance_ad),
+         estudo = factor(estudo))
+
+model_full <- lmer(prod ~ sev * tolerance_ad + (sev | estudo), data = df2)
+model_no_interaction <- lmer(prod ~ sev + tolerance_ad + (sev | estudo), data = df2)
+model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df2)
+anova(model_no_group, model_no_interaction, model_full)
+```
+
+### Yield class used as a moderator
+
+Adding the interaction between severity and yield class improved the model fit.
+
+```{r}
+# prod class
+df3 <- data1 |> 
+  mutate(prod_class = factor(prod_class),
+         estudo = factor(estudo))  # If not already a factor
+
+model_full <- lmer(prod ~ sev * prod_class + (sev | estudo), data = df3)
+model_no_interaction <- lmer(prod ~ sev + prod_class + ( sev | estudo), data = df3)
+model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df3)
+anova(model_no_group, model_no_interaction, model_full)
+
+summary(model_full)
+```
+
+Graphical visualization of how yield class affects the relationship as a moderating variable.
+
+```{r}
+fig_pc1 <- data3 |> 
+  ggplot(aes(sev + 1, prod, color = factor(prod_class))) +
+  scale_color_manual(
+    name = "Yield Class", 
+    values = c("baixa" = "#ff9688", "alta" = "#3A5FCD"),
+    labels = c("baixa" = "Low", "alta" = "High")
+  ) +
+  theme_bw()+
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~estudo)+
+  labs(y = "Yield (Kg/ha)",x = "Severity score")
+
+fig_pc1
+```
+
+### Severity class used as a moderator
+
+Adding the interaction between severity and severity class did not improve the model fit, indicating that severity affects production similarly across groups.
+
+```{r}
+#sev class
+med_sev <- sev_dif |> 
+  summarise(med_sev = median(enfez, na.rm = TRUE)) |> 
+  pull(med_sev)
+
+df4 <- data1 |> 
+  mutate(sev_class = factor(ifelse(sev > med_sev, "alta", "baixa")))
+
+model_full <- lmer(prod ~ sev * sev_class + (sev | estudo), data = df4)
+model_no_interaction <- lmer(prod ~ sev + sev_class + (sev | estudo), data = df4)
+model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df4)
+anova(model_no_group, model_no_interaction, model_full)
+
+
+```
+
+### Foliar spot pressure used as a moderator
+
+Adding the interaction between severity and foliar spot pressure did not improve the model fit, indicating that severity affects production similarly across groups.
+
+```{r}
+#foliar spot pressure
+med_spots <- sev_dif |> 
+  summarise(med_spots = median(manchas_totais, na.rm = TRUE)) |> 
+  pull(med_spots)
+
+df5 <- sev_dif |> 
+  mutate(spot_press = factor(ifelse(manchas_totais > med_spots, "alta", "baixa")))
+
+model_full <- lmer(prod ~ enfez * spot_press + (enfez | estudo), data = df5)
+model_no_interaction <- lmer(prod ~ enfez + spot_press + (enfez | estudo), data = df5)
+model_no_group <- lmer(prod ~ enfez + (enfez | estudo), data = df5)
+anova(model_no_group, model_no_interaction, model_full)
+        
+
+```
+
+# How does yield class affect corn production?
+
+We adjusted the model coefficients for the high- and low-productivity classes and then calculated the damage coefficient for each of them.
+
+```{r}
+
+intercept_baixa <- 6867.64
+slope_baixa <- -868.14
+
+intercept_alta <- intercept_baixa + 2160.70
+slope_alta <- slope_baixa + 197.18
+
+pul_baixa = (slope_baixa/intercept_baixa) * 100
+pul_alta = (slope_alta) / (intercept_alta) * 100
+
+pul_baixa
+pul_alta
+```
+
+The confidence interval was calculated.
+
+```{r}
+confint(model_full)
+```
+
+All of the above information was transformed into a graph for better visualization.
+
+```{r}
+
+# Confidence intervals that you obtained
+ci <- tribble(
+  ~term,                ~low,          ~high,
+  "(Intercept)",        6060.447,      7647.010,
+  "sev",               -1049.560,     -697.426,
+  "prod_classalta",     1756.064,      2558.214,
+  "sev:prod_classalta",   32.024,       366.974
+)
+
+# Sequence of severity
+sev_seq <- seq(0, 5, length.out = 100)
+
+# ---- Low productivity ----
+intercept_baixa_low  <- ci$low[ci$term=="(Intercept)"]
+intercept_baixa_high <- ci$high[ci$term=="(Intercept)"]
+slope_baixa_low      <- ci$low[ci$term=="sev"]
+slope_baixa_high     <- ci$high[ci$term=="sev"]
+
+df_baixa <- tibble(
+  sev = sev_seq,
+  fit_low  = intercept_baixa_low  + slope_baixa_low  * sev,
+  fit_high = intercept_baixa_high + slope_baixa_high * sev,
+  prod_class = "Low"
+)
+
+# ---- High productivity ----
+intercept_alta_low  <- intercept_baixa_low  + ci$low[ci$term=="prod_classalta"]
+intercept_alta_high <- intercept_baixa_high + ci$high[ci$term=="prod_classalta"]
+slope_alta_low      <- slope_baixa_low  + ci$low[ci$term=="sev:prod_classalta"]
+slope_alta_high     <- slope_baixa_high + ci$high[ci$term=="sev:prod_classalta"]
+
+df_alta <- tibble(
+  sev = sev_seq,
+  fit_low  = intercept_alta_low  + slope_alta_low  * sev,
+  fit_high = intercept_alta_high + slope_alta_high * sev,
+  prod_class = "High"
+)
+
+# Combine everything
+df_all <- bind_rows(df_baixa, df_alta)
+
+# Plot the graph
+Yc_plot <- ggplot(df_all, aes(x = sev, color = prod_class, fill = prod_class)) +
+  geom_ribbon(aes(ymin = fit_low, ymax = fit_high), alpha = 0.2, color = NA) +
+  geom_line(aes(y = (fit_low + fit_high)/2), size = 1.5) +
+  scale_color_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
+  scale_fill_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
+  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
+  scale_y_continuous(breaks = seq(0, 12000, by = 2000), limits = c(0, 12000)) +
+  labs(
+    x = "Scale score -1", 
+    y = "Yield (kg/ha)",
+    color = "Yield class",
+    fill  = "Yield class"
+  ) +
+  theme_bw(base_size = 18) +
+  theme(
+     panel.grid.minor = element_blank(),
+    text = element_text(size = 20),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+    legend.position = "top",
+    plot.title = element_text(hjust = 0.5, size = 18)
+  ) +
+  annotate("text", x = 1.5, y = 10300, label = "DC: -7.43%", color = "#3A5FCD", hjust = 0) +
+  annotate("text", x = 1, y = 3000, label = "DC: -12.64%", color = "red", hjust = 0)
+
+Yc_plot
+
+```
+
+A graph was created showing the relative yield loss (%) as a function of disease severity.
+
+```{r}
+# Definitions of the mean DCs (as you already noted)
+dc_high <- -7.43   # %
+dc_low  <- -12.64  # %
+
+# Sequence of severity
+sev_seq <- 0:5
+
+# Create dataframe for plotting
+df_rel <- tibble(
+  sev = rep(sev_seq, 2),
+  DC  = c(dc_low * sev_seq, dc_high * sev_seq),   # cumulative loss
+  prod_class = rep(c("Low", "High"), each = length(sev_seq))
+)
+
+# Relative plot
+DC_plot <- ggplot(df_rel, aes(x = sev, y = DC, color = prod_class)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
+  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
+  labs(
+    x = "Scale score -1",
+    y = "Relative Yield Loss (%)",
+    color = "Yield class"
+  ) +
+  theme_bw(base_size = 18) +
+  theme(
+    legend.position = "top",
+    axis.text.x = element_text(size = 16),
+    axis.text.y = element_text(size = 16)
+  ) +
+  annotate("text", x = 5, y = dc_high*5, 
+           label = paste0("Max RYL: ", dc_high*5, "%"), color = "#3A5FCD", hjust = 1, vjust = -5) +
+  annotate("text", x = 5, y = dc_low*5, 
+           label = paste0("Max RYL: ", dc_low*5, "%"), color = "red", hjust = 1.4, vjust = 0.1)
+
+DC_plot
+
+```
+
+Due to the observed difference, we investigated whether plants from different yield classes exhibited distinct severity distributions through a density plot.
+
+```{r}
+den_ydcl <- ggplot(data3, aes(x = sev + 1, fill = prod_class)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = c("baixa" = "#ff9688", "alta" = "#3A5FCD"), 
+                     labels = c("baixa" = "Low", "alta" = "High")) +
+  scale_x_continuous(limits = c(1, 6), breaks = seq(1, 6, 1)) +
+  labs(
+    x = "Scale score -1",
+    y = "Density",
+    fill = "Yield Class"
+  ) +
+  theme_bw()
+den_ydcl
+```

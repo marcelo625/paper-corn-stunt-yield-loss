@@ -1,0 +1,145 @@
+---
+title: "Modeling of yield losses caused by the corn stunt disease complex"
+warning: false
+message: false
+author: "Marcelo Gonçalves"
+format: html
+editor: visual
+---
+
+# Dependencies
+
+Let's load all the packages we will use in the map creation
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthhires)
+library(ggrepel)
+library(ggspatial)
+library(cowplot)
+```
+
+# Coordinates
+
+Create the data frame with the studies and coordinates
+
+```{r}
+
+dados <- tribble(
+  ~Trial, ~Municipality, ~Year, ~Latitude, ~Longitude,
+   1, "Cambará", 2022, -23.0466, -50.0750,
+   2, "Cambará", 2022, -23.0466, -50.0750,
+   3, "Campo Mourão", 2022, -24.0469, -52.3780,
+   4, "Campo Mourão", 2022, -24.0469, -52.3780,
+   5, "Londrina", 2022, -23.3045, -51.1696,
+   6, "Londrina", 2022, -23.3045, -51.1696,
+   7, "Palotina", 2022, -24.2836, -53.8406,
+   8, "Palotina", 2022, -24.2836, -53.8406,
+   9, "Santa Helena", 2022, -24.8583, -54.3366,
+  10, "Santa Helena", 2022, -24.8583, -54.3366,
+  11, "Santa Tereza do Oeste", 2022, -25.0540, -53.6275,
+  12, "Santa Tereza do Oeste", 2022, -25.0540, -53.6275,
+  13, "Londrina", 2023, -23.3045, -51.1696,
+  14, "Primeiro de Maio", 2023, -22.8515, -51.0290,
+  15, "Cambará", 2023, -23.0466, -50.0750,
+  16, "Sabáudia", 2023, -23.3152, -51.5554,
+  17, "Ibiporã", 2023, -23.2659, -51.0520,
+  18, "Campo Mourão", 2023, -24.0469, -52.3780,
+  19, "Palotina", 2023, -24.2836, -53.8406,
+  20, "Medianeira", 2023, -25.2971, -54.0942
+)
+
+```
+
+```{r}
+
+BRA <- ne_states(country = "Brazil",
+                 returnclass = "sf")
+ARG <- ne_states(country = "Argentina",
+                 returnclass = "sf")
+PRG <- ne_states(country = "Paraguay",
+                 returnclass = "sf")
+
+# Now extract the state
+# Use unique(BRA$name) to see the names of the states
+
+unique(BRA$name)
+
+PR <- BRA[BRA$name_en == "Paraná", ]
+
+# Group by location and count the number of studies
+resumo_locais <- dados %>%
+  group_by(Municipality, Latitude, Longitude) %>%
+  summarise(n = n(), .groups = "drop")
+
+fig1 <- ggplot() +
+  # Brazil map in the background, with a light fill color
+  geom_sf(data = BRA, fill = "gray90", color = "gray60") +
+  geom_sf(data = ARG, fill = "gray90", color = "gray60") +
+  geom_sf(data = PRG, fill = "gray90", color = "gray60") +
+  
+  # Paraná overlaid in white
+  geom_sf(data = PR, fill = "white", color = "black", linewidth = 0.4) +
+  
+  # Points
+  geom_point(data = resumo_locais,
+             aes(x = Longitude, y = Latitude, size = n),
+             color = "#3A5FCD", alpha = 0.7) +
+  
+  # label
+  geom_label_repel(data = resumo_locais,
+                   aes(x = Longitude, y = Latitude, label = Municipality),
+                   size = 3, fontface = "bold",
+                   max.overlaps = Inf,
+                   fill = "white",
+                   color = "black",
+                   label.size = 0.5,
+                   segment.size = 0.3,
+                   point.padding = 0.3,
+                   force = 5,
+                   nudge_y = 0.25) +
+  
+  # Size legend
+  scale_size_continuous(
+    name = "No. of trials",
+    range = c(3, 8),
+    breaks = c(1, 2, 3),
+    guide = guide_legend(override.aes = list(alpha = 1))
+  ) +
+  
+  # Visualization limits
+  coord_sf(xlim = c(-55, -48), ylim = c(-27, -22), expand = FALSE) +
+   annotation_north_arrow(location = "bl", which_north = "true",
+                         style = north_arrow_fancy_orienteering)+
+  
+  theme_bw()
+
+fig1
+```
+
+\
+\
+
+```{r}
+# Map of Brazil with Paraná highlighted
+inset_map <- ggplot() +
+  geom_sf(data = BRA, fill = "gray90", color = "gray80") +
+  geom_sf(data = PR, fill = "white", color = "black", linewidth = 0.3) +
+  coord_sf(xlim = c(-75, -34), ylim = c(-34, 6), expand = FALSE) +
+  theme_void() +
+  theme(panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8))
+
+inset_map
+```
+
+```{r}
+final_map <- ggdraw() +
+  draw_plot(fig1) +  # Main map
+  draw_plot(inset_map, 
+            x = 0.77, y = 0.70,    # Top-left corner position
+            width = 0.24, height = 0.24)  # inset size
+
+final_map
+```
