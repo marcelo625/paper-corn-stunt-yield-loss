@@ -1,5 +1,7 @@
 ---
 title: "How Much Yield Loss Is Caused by the Corn Stunt Disease Complex?"
+editor_options: 
+  chunk_output_type: console
 ---
 
 Explore our collection of carefully documented R scripts, designed to make it easy to replicate the analyses from our study on modeling yield losses caused by the corn stunt disease complex.
