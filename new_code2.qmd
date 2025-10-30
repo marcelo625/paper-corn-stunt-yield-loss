@@ -1,13 +1,15 @@
 ---
-title: "Modeling of yield losses caused by the corn stunt disease complex "
+title: "Modeling yield losses caused by the corn stunt disease complex "
 author: "Marcelo Gonçalves"
 warning: false
 message: false
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
-# Dependencies
+# Libraries
 
 Let's load all the packages we will use in the analyses below. Make sure all packages are installed beforehand. If you don't have them installed yet, you can install them from the CRAN repository.
 
@@ -72,7 +74,6 @@ ef_median <- exp1 |>
             median_sev = median(enfez),
             median_prod = median(prod))
 
-
 ef_median |> 
   group_by(ano) |> 
   summarise(median_sev = mean(median_sev),
@@ -89,8 +90,8 @@ summary(ef_median)
 dist_sev <- ef_median |>
   ggplot(aes(median_sev)) +
   geom_histogram(bins = 10, 
-                 fill = "#3A5FCD",
-                 color = "darkblue",
+                 fill = "gray90",
+                 color = "black",
                  linewidth = 0.5) +
   labs(x = "Severity  score", y = "") +
   geom_vline(xintercept = 3.637, size = 1.3, linetype = 2)+
@@ -99,8 +100,8 @@ dist_sev <- ef_median |>
 
 dist_prod<- ef_median |>
   ggplot(aes(median_prod)) +
-  geom_histogram(bins = 20, fill = "#3A5FCD",
-                 color = "darkblue",
+  geom_histogram(bins = 20, fill = "gray90",
+                 color = "black",
                  linewidth = 0.5) +
   labs(x = "Yield (kg/ha)", y = "") +
    geom_vline(xintercept = 6270, size = 1.3, linetype = 2)+
@@ -112,7 +113,7 @@ dist_prod<- ef_median |>
 ```{r}
 box_sev <- ef_median |>
   ggplot(aes(factor(ano), median_sev)) +
-  geom_boxplot(outlier.shape = NA, fill = "#3A5FCD", color = "darkblue") +
+  geom_boxplot(outlier.shape = NA, fill = "gray90", color = "black") +
   theme_bw() +
   labs(x = "Second crop season", y = "Severity score")
 
@@ -120,7 +121,7 @@ box_sev <- ef_median |>
 
 box_prod<- ef_median |>
   ggplot(aes(factor(ano), median_prod)) +
-  geom_boxplot(outlier.shape = NA, fill = "#3A5FCD", color = "darkblue") +
+  geom_boxplot(outlier.shape = NA, fill = "gray90", color = "black") +
   theme_bw() +
   labs(x = "Second crop season", y = "Yield (kg/ha)")
 
@@ -152,153 +153,49 @@ gc1 <- ef_median |>
 gc1
 ```
 
-### Individual correlation
-
-We also performed individual correlation analyses for the 22 studies and applied the Fisher Z-transformation.
-
-```{r}
-correlation_data <- data1 |> 
-  group_by(estudo) |> 
-  summarise(r_sev_yld = cor(sev, prod), 
-            n = n(), 
-            Z_sev_yld = 0.5*log((1+r_sev_yld)/(1-r_sev_yld)), 
-            V = 1/(n-3), 
-            vd_sev_yld = 1/(2*(1-r_sev_yld)/n-3)) |>  
-  filter(r_sev_yld != "NA") |> 
-  filter(n > 4)
-
-
-summary(correlation_data)
-```
-
-Individual values were plotted to improve visualization.
-
-```{r}
-r <- correlation_data %>% 
-  ggplot(aes(r_sev_yld)) +
-  geom_histogram(bins = 10,
-                 color = "black",
-                 fill = "grey85",
-                 alpha = 0.5,
-                 linewidth = 1) +
-  theme_bw()+
-  ylab("Frequency") +
-  xlab(expression("Pearson's coefficient")) +
-    theme(
-    axis.title.x = element_text(size = 20), 
-    axis.title.y = element_text(size = 20), 
-    axis.text.x = element_text(size = 16),   
-    axis.text.y = element_text(size = 16))
-
-z <- correlation_data %>% 
-  ggplot(aes(Z_sev_yld))+
-  geom_histogram(bins = 10,
-                 color = "black",
-                 fill = "grey85",
-                 alpha = 0.5,
-                 linewidth = 1) +
-  theme_bw()+
-  ylab("Frequency") +
-  xlab(expression("Fisher's " * "" * italic(Z) * "")) +
-    theme(
-    axis.title.x = element_text(size = 20), 
-    axis.title.y = element_text(size = 20), 
-    axis.text.x = element_text(size = 16),   
-    axis.text.y = element_text(size = 16))
-
-```
-
-```{r}
-fit_all <- sev_dif |> 
-  group_by(estudo) |> 
-  do(tidy(lm(.$prod ~ .$enfez), conf.int=TRUE))
-
-summary(fit_all)
-```
-
-```{r}
-Intercepts <- fit_all |> 
-  filter(term == "(Intercept)")
-
-Slopes <-  fit_all |> 
-  filter(term == ".$enfez")
-```
-
-```{r}
-summary(Slopes)
-```
-
-```{r}
-b0 <- fit_all |> 
-  filter(term == "(Intercept)") |> 
-  ggplot(aes(x = estimate))+
-  geom_histogram(bins = 15, color = "black", fill = "grey85", alpha = 0.5, size = 1)+
-  theme_bw()+
-  labs(x = "Intercept", y = "Frequency") +
-  theme(
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20),
-    axis.text.x = element_text(size = 16),   
-    axis.text.y = element_text(size = 16))
-
-b1 <- fit_all |> 
-  filter(term == ".$enfez") |> 
-  ggplot(aes(x = estimate))+
-  geom_histogram(bins = 15, color = "black", fill = "grey85", alpha = 0.5, size = 1)+
-    #geom_vline(xintercept = -60.2210    , size = 1.5, linetype = 2, color = "black")+
-  theme_bw()+
-  labs(x = "Slope", y = "Frequency")+
-   theme(
-    axis.title.x = element_text(size = 20), 
-    axis.title.y = element_text(size = 20), 
-    axis.text.x = element_text(size = 16),   
-    axis.text.y = element_text(size = 16))
-```
-
-Final figure used in the article
-
-```{r}
-fs1 = (r+z)/(b0+b1) + plot_annotation(tag_levels = "A") 
-fs1
-```
-
-# **Mixed-effects model**
+# Random coefficients model
 
 We fitted a mixed-effects model to estimate the effect of severity on yield, including random slopes and intercepts for each study to account for variation among studies.
 
 ```{r}
 mm1 <- lmer(prod ~ sev  + (sev | estudo), data = data1,
-            REML = F)
+            REML = TRUE)
 summary(mm1)
+confint(mm1)
+VarCorr(mm1)
+
+isSingular(mm1)
+
+performance::r2(mm1)
+
+performance::icc(mm1)
+
+
+
 ```
 
-We extracted the variance from the random effects of the mixed-effects model and obtained the residual variance. Using the intercept and slope variances, we calculated τ² (total variance of the random effects) and then computed I² to quantify the proportion of total variability due to heterogeneity between studies.
+### Table 1. Summary of the random-coefficients mixed-effects model describing the relationship between disease severity and yield across 22 trials
 
-```{r}
-# Extracting variance from random effects
-random_effects_variance <- VarCorr(mm1)
+| **Parameter** | **Estimate ± SE** | **95 % CI (LCL–UCL)** | **Interpretation** |
+|:-----------------|-----------------:|-----------------:|:-----------------|
+| **Fixed effects** |  |  |  |
+| Intercept (β₀) | 8 229 ± 215 | 7 820 – 8 640 | Attainable (disease-free) yield (kg ha⁻¹) |
+| Severity (β₁) | −1 043 ± 112 | −1 260 – −830 | Yield loss per unit increase in severity |
+| **Random effects (SD)** |  |  |  |
+| Intercept (study) | 2 512 |  | Between-study heterogeneity in attainable yield |
+| Slope (study) | 315 |  | Between-study heterogeneity in loss rate |
+| Corr (intercept, slope) | −0.51 |  | High-yield studies show steeper losses |
+| **Model fit indices** |  |  |  |
+| Marginal R² / Conditional R² | 0.58 / 0.72 |  | Variance explained by fixed vs. full model |
+| Residual SD | 1 265 |  | Within-study variation |
+| ICC (inter-study) | 0.46 |  | Proportion of variance between studies |
 
-# Accessing the variance/covariance matrix of the 'cod' group
-var_random_effects <- random_effects_variance$estudo
+------------------------------------------------------------------------
 
-# Residual variance (error)
-sigma2 <- sigma(mm1)^2
+*Model fitted by restricted maximum likelihood (REML).\
+95 % confidence intervals obtained by profile likelihood. R² values computed following Nakagawa and Schielzeth (2013).*
 
-# τ² (variance of random effects)
-# The variance of the intercept is in the first row and column
-var_intercept <- var_random_effects[1, 1]
-
-# The slope variance is in the second row and column
-var_slope <- var_random_effects[2, 2]
-
-# Calculate I²
-tau2 <- var_intercept + var_slope  # Total variance of random effects
-I2 <- (tau2 / (tau2 + sigma2)) * 100  # Calculation of I²
-
-I2
-```
-
-We calculate confidence intervals for the mixed-effects model undefinedsing the profile likelihood
+We calculate confidence intervals for the mixed-effects model using the profile likelihood
 
 ```{r}
 confint(mm1, method = "profile")  # Interval based on likelihood profile
@@ -306,16 +203,110 @@ confint(mm1, method = "profile")  # Interval based on likelihood profile
 
 Data distribution from individual analyses of 22 studies. Blue points represent observed data, and gray lines indicate individual linear regressions.
 
+Calculation of the damage coefficient by yield level
+
+```{r}
+library(dplyr)
+library(tibble)
+library(purrr)
+
+# model_full: lmer(prod ~ Sprime + (Sprime | STUDY), data = df) or your extended model
+fe <- fixef(mm1)
+re <- ranef(mm1)$estudo %>%
+  rownames_to_column("estudo") %>%
+  rename(b0 = `(Intercept)`, b1 = sev)  # rename 'Sprime' to your severity term name
+
+# Study-specific intercepts and slopes
+study_lines <- re %>%
+  mutate(alpha = fe["(Intercept)"] + b0,
+         gamma = fe[["sev"]]      + b1,
+         RDC   = gamma / alpha)
+
+# Median split on intercept
+med_alpha <- median(study_lines$alpha, na.rm = TRUE)
+study_lines <- study_lines %>%
+  mutate(intercept_stratum = if_else(alpha > med_alpha, "High", "Low"))
+
+# Stratified summaries (means)
+summary_RDC <- study_lines %>%
+  group_by(intercept_stratum) %>%
+  summarise(n = n(),
+            mean_alpha = mean(alpha),
+            mean_gamma = mean(gamma),
+            mean_RDC   = mean(RDC),
+            sd_RDC     = sd(RDC), .groups = "drop")
+
+# Optional: bootstrap 95% CI for mean RDC by stratum
+set.seed(123)
+B <- 2000
+boot_out <- map_dfr(c("High","Low"), function(strat){
+  x <- study_lines %>% filter(intercept_stratum == strat) %>% pull(RDC)
+  means <- replicate(B, mean(sample(x, replace = TRUE)))
+  tibble(intercept_stratum = strat,
+         RDC_lo = quantile(means, 0.025),
+         RDC_hi = quantile(means, 0.975))
+})
+
+summary_RDC <- left_join(summary_RDC, boot_out, by = "intercept_stratum")
+print(summary_RDC)
+
+
+
+
+# ---- Build mean lines per stratum ----
+stratum_lines <- summary_RDC %>%
+  transmute(
+    intercept_stratum,
+    intercept = mean_alpha,
+    slope     = mean_gamma
+  )
+
+library(dplyr)
+library(ggplot2)
+
+# Build mean lines per stratum if not already built
+stratum_lines <- summary_RDC %>%
+  transmute(intercept_stratum,
+            intercept = mean_alpha,
+            slope     = mean_gamma)
+
+# Choose the x-range you want to display (use 0–5 if S' = S-1)
+x_min <- 0
+x_max <- 5
+
+# Compute segment endpoints
+seg <- stratum_lines %>%
+  mutate(x0 = x_min,
+         x1 = x_max,
+         y0 = intercept + slope * x0,
+         y1 = intercept + slope * x1)
+
+# Plot the segments
+ggplot(seg) +
+  geom_segment(aes(x = x0, xend = x1, y = y0, yend = y1, color = intercept_stratum),
+               linewidth = 1.8, lineend = "round") +
+  scale_color_manual(values = c(High = "#1f77b4", Low = "#d62728"),
+                     name = "Intercept stratum") +
+  scale_x_continuous(limits = c(x_min, x_max), expand = c(0, 0)) +
+  # Set y-limits to include both segment endpoints
+  scale_y_continuous(limits = range(c(seg$y0, seg$y1)), expand = expansion(mult = 0.02)) +
+  labs(x = "Severity (rescaled S' = S - 1)",
+       y = "Yield (kg/ha)",
+       title = "Mean yield–severity lines for High vs Low intercept strata") +
+  theme_bw()
+
+```
+
 ```{r}
 
 fig3a <- ggplot() +
   scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
   scale_y_continuous(breaks = seq(0, 14000, by = 2000), limits = c(0, 14000)) +
-  geom_abline(aes(slope = Slopes$estimate, intercept = Intercepts$estimate), 
+  geom_abline(aes(slope = study_lines$gamma, intercept = study_lines$alpha), 
               size = 1, alpha = 0.5, color = "darkgray") +
  geom_point(data = ef_median, aes(x = mean_sev-1, y = mean_yld),
-             color = "#3A5FCD", shape = 16, alpha = 0.3) +
-  labs(x = "Scale score -1", y = "Yield (kg/ha)") +
+             color = "black", shape = 16, alpha = 0.3) +
+  labs(x = "Severity (rescaled S' = S - 1)", y = "Yield (kg/ha)") +
   theme_bw() +
   theme(text = element_text(size = 20),
         axis.text.x = element_text(size = 18),
@@ -329,7 +320,7 @@ Meta-analysis using a mixed-effects model. Blue line represents the average esti
 
 ```{r}
 r_regression_misto <- data.frame(
-  estimate = c(8229.026, -1043.024),
+  estimate = c(8227.42, -1042.59),
   low = c(7050.872811 , -1217.903252),
   high = c(9342.37841711, -869.23656135)
 )
@@ -339,14 +330,14 @@ fig3b <- ggplot() +
   scale_y_continuous(breaks = seq(0, 14000, by = 2000), limits = c(0, 14000)) +
   geom_abline(data = r_regression_misto, 
               aes(slope = estimate[2], intercept = estimate[1]), 
-              size = 1.5, color = "#3A5FCD") +
+              size = 1.5, color = "black") +
   geom_abline(data = r_regression_misto, 
               aes(intercept = high[1], slope = high[2]), 
               size = 1.2, linetype = 2) +
   geom_abline(data = r_regression_misto, 
               aes(intercept = low[1], slope = low[2]), 
               size = 1.2, linetype = 2) +
-  labs(x = "Scale score -1", y = "Yield (kg/ha)") +
+  labs(x = "Severity (rescaled S' = S - 1)", y = "Yield (kg/ha)") +
   theme_bw() +
   theme(text = element_text(size = 20),
         axis.text.x = element_text(size = 18),
@@ -355,25 +346,24 @@ fig3b <- ggplot() +
 fig3b
 ```
 
+```{r}
+
+library(patchwork)
+fig3a + fig3b
+
+
+```
+
 Calculation of damage when the disease reaches the maximum severity score.
 
 ```{r}
-# 8229.026   -1043.024 
-y1 = 8229.03
+   
+y1 = 8227.34
 
-y6 = 8229.03 + (-1043.02 * 5)
-
+y6 = 8227.34 + (-1042.59 * 5)
 
 max_damage = ((y1 - y6) / y1) * 100
 max_damage
-```
-
-Calculation of the damage coefficient
-
-```{r}
-
-per_unit_loss = -1043.024 / y1 * 100
-per_unit_loss
 ```
 
 # Creation of susceptibility levels
@@ -391,7 +381,17 @@ df <- data1 |>
   )
 
 # Fit mixed model: random effect for HYBRID, optionally random LOC:YEAR
-model <- lmer(sev ~ (1|HYBRID) + (1|YEAR) + (1|LOC) + (1|LOC:YEAR), data = df)
+model <- lmer(
+  sev ~ 1 + (1|HYBRID) + (1|YEAR) + (1|LOC) ,
+  data = df, REML = TRUE,
+  control = lmerControl(
+    optimizer = "bobyqa",
+    optCtrl = list(maxfun = 2e5)
+  )
+)
+allfits <- lme4::allFit(update(model, control = lmerControl(optimizer="bobyqa")))
+summary(allfits)
+
 
 blups <- ranef(model)$HYBRID |> 
   rownames_to_column("HYBRID") |> 
@@ -472,8 +472,8 @@ df <- data3 |>
          STUDY = factor(estudo))  # If not already a factor
 
 
-model0 <- lmer(prod ~ sev  + (sev | STUDY), data = df)
-model <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df)
+model0 <- lmer(prod ~ sev  + (sev | STUDY), data = df, REML = FALSE)
+model <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df, REML = FALSE)
 anova(model0, model)
 car::Anova(model)
 
@@ -486,25 +486,25 @@ coef(model)$STUDY
 
 ```
 
-# Moderators
+# Covariates
 
-### Susceptibility levels used as a moderator
+### Susceptibility levels used as a fixed covariate
 
 Adding the interaction between severity and susceptibility group did not improve the model fit, indicating that severity affects production similarly across groups.
 
 ```{r}
 # susceptibility levels
 
-model_full <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df)
-model_no_interaction <- lmer(prod ~ sev + GROUP + (sev | STUDY), data = df)
-model_no_group <- lmer(prod ~ sev + (sev | STUDY), data = df)
+model_full <- lmer(prod ~ sev * GROUP + (sev | STUDY), data = df, REML = FALSE)
+model_no_interaction <- lmer(prod ~ sev + GROUP + (sev | STUDY), data = df, REML = FALSE)
+model_no_group <- lmer(prod ~ sev + (sev | STUDY), data = df, REML = FALSE)
 anova(model_no_group, model_no_interaction, model_full)
 
 ```
 
-### Tolerance group used as a moderator
+### Tolerance group used as covariate
 
-Adding the interaction between severity andtolerance group did not improve the model fit, indicating that severity affects production similarly across groups.
+Adding the interaction between severity and tolerance group did not improve the model fit, indicating that severity affects production similarly across groups.
 
 ```{r}
 # tolerance group
@@ -512,68 +512,10 @@ df2 <- data1 |>
   mutate(tolerance_ad = factor(tolerance_ad),
          estudo = factor(estudo))
 
-model_full <- lmer(prod ~ sev * tolerance_ad + (sev | estudo), data = df2)
-model_no_interaction <- lmer(prod ~ sev + tolerance_ad + (sev | estudo), data = df2)
-model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df2)
+model_full <- lmer(prod ~ sev * tolerance_ad + (sev | estudo), data = df2, REML = FALSE)
+model_no_interaction <- lmer(prod ~ sev + tolerance_ad + (sev | estudo), data = df2, REML = FALSE)
+model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df2, REML = FALSE)
 anova(model_no_group, model_no_interaction, model_full)
-```
-
-### Yield class used as a moderator
-
-Adding the interaction between severity and yield class improved the model fit.
-
-```{r}
-# prod class
-df3 <- data1 |> 
-  mutate(prod_class = factor(prod_class),
-         estudo = factor(estudo))  # If not already a factor
-
-model_full <- lmer(prod ~ sev * prod_class + (sev | estudo), data = df3)
-model_no_interaction <- lmer(prod ~ sev + prod_class + ( sev | estudo), data = df3)
-model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df3)
-anova(model_no_group, model_no_interaction, model_full)
-
-summary(model_full)
-```
-
-Graphical visualization of how yield class affects the relationship as a moderating variable.
-
-```{r}
-fig_pc1 <- data3 |> 
-  ggplot(aes(sev + 1, prod, color = factor(prod_class))) +
-  scale_color_manual(
-    name = "Yield Class", 
-    values = c("baixa" = "#ff9688", "alta" = "#3A5FCD"),
-    labels = c("baixa" = "Low", "alta" = "High")
-  ) +
-  theme_bw()+
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  facet_wrap(~estudo)+
-  labs(y = "Yield (Kg/ha)",x = "Severity score")
-
-fig_pc1
-```
-
-### Severity class used as a moderator
-
-Adding the interaction between severity and severity class did not improve the model fit, indicating that severity affects production similarly across groups.
-
-```{r}
-#sev class
-med_sev <- sev_dif |> 
-  summarise(med_sev = median(enfez, na.rm = TRUE)) |> 
-  pull(med_sev)
-
-df4 <- data1 |> 
-  mutate(sev_class = factor(ifelse(sev > med_sev, "alta", "baixa")))
-
-model_full <- lmer(prod ~ sev * sev_class + (sev | estudo), data = df4)
-model_no_interaction <- lmer(prod ~ sev + sev_class + (sev | estudo), data = df4)
-model_no_group <- lmer(prod ~ sev + (sev | estudo), data = df4)
-anova(model_no_group, model_no_interaction, model_full)
-
-
 ```
 
 ### Foliar spot pressure used as a moderator
@@ -589,170 +531,10 @@ med_spots <- sev_dif |>
 df5 <- sev_dif |> 
   mutate(spot_press = factor(ifelse(manchas_totais > med_spots, "alta", "baixa")))
 
-model_full <- lmer(prod ~ enfez * spot_press + (enfez | estudo), data = df5)
-model_no_interaction <- lmer(prod ~ enfez + spot_press + (enfez | estudo), data = df5)
-model_no_group <- lmer(prod ~ enfez + (enfez | estudo), data = df5)
+model_full <- lmer(prod ~ enfez * spot_press + (enfez | estudo), data = df5, REML = FALSE)
+model_no_interaction <- lmer(prod ~ enfez + spot_press + (enfez | estudo), data = df5, REML = FALSE)
+model_no_group <- lmer(prod ~ enfez + (enfez | estudo), data = df5, REML = FALSE)
 anova(model_no_group, model_no_interaction, model_full)
         
 
-```
-
-# How does yield class affect corn production?
-
-We adjusted the model coefficients for the high- and low-productivity classes and then calculated the damage coefficient for each of them.
-
-```{r}
-
-intercept_baixa <- 6867.64
-slope_baixa <- -868.14
-
-intercept_alta <- intercept_baixa + 2160.70
-slope_alta <- slope_baixa + 197.18
-
-pul_baixa = (slope_baixa/intercept_baixa) * 100
-pul_alta = (slope_alta) / (intercept_alta) * 100
-
-pul_baixa
-pul_alta
-```
-
-The confidence interval was calculated.
-
-```{r}
-confint(model_full)
-```
-
-All of the above information was transformed into a graph for better visualization.
-
-```{r}
-
-# Confidence intervals that you obtained
-ci <- tribble(
-  ~term,                ~low,          ~high,
-  "(Intercept)",        6060.447,      7647.010,
-  "sev",               -1049.560,     -697.426,
-  "prod_classalta",     1756.064,      2558.214,
-  "sev:prod_classalta",   32.024,       366.974
-)
-
-# Sequence of severity
-sev_seq <- seq(0, 5, length.out = 100)
-
-# ---- Low productivity ----
-intercept_baixa_low  <- ci$low[ci$term=="(Intercept)"]
-intercept_baixa_high <- ci$high[ci$term=="(Intercept)"]
-slope_baixa_low      <- ci$low[ci$term=="sev"]
-slope_baixa_high     <- ci$high[ci$term=="sev"]
-
-df_baixa <- tibble(
-  sev = sev_seq,
-  fit_low  = intercept_baixa_low  + slope_baixa_low  * sev,
-  fit_high = intercept_baixa_high + slope_baixa_high * sev,
-  prod_class = "Low"
-)
-
-# ---- High productivity ----
-intercept_alta_low  <- intercept_baixa_low  + ci$low[ci$term=="prod_classalta"]
-intercept_alta_high <- intercept_baixa_high + ci$high[ci$term=="prod_classalta"]
-slope_alta_low      <- slope_baixa_low  + ci$low[ci$term=="sev:prod_classalta"]
-slope_alta_high     <- slope_baixa_high + ci$high[ci$term=="sev:prod_classalta"]
-
-df_alta <- tibble(
-  sev = sev_seq,
-  fit_low  = intercept_alta_low  + slope_alta_low  * sev,
-  fit_high = intercept_alta_high + slope_alta_high * sev,
-  prod_class = "High"
-)
-
-# Combine everything
-df_all <- bind_rows(df_baixa, df_alta)
-
-# Plot the graph
-Yc_plot <- ggplot(df_all, aes(x = sev, color = prod_class, fill = prod_class)) +
-  geom_ribbon(aes(ymin = fit_low, ymax = fit_high), alpha = 0.2, color = NA) +
-  geom_line(aes(y = (fit_low + fit_high)/2), size = 1.5) +
-  scale_color_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
-  scale_fill_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
-  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
-  scale_y_continuous(breaks = seq(0, 12000, by = 2000), limits = c(0, 12000)) +
-  labs(
-    x = "Scale score -1", 
-    y = "Yield (kg/ha)",
-    color = "Yield class",
-    fill  = "Yield class"
-  ) +
-  theme_bw(base_size = 18) +
-  theme(
-     panel.grid.minor = element_blank(),
-    text = element_text(size = 20),
-    axis.text.x = element_text(size = 18),
-    axis.text.y = element_text(size = 18),
-    legend.position = "top",
-    plot.title = element_text(hjust = 0.5, size = 18)
-  ) +
-  annotate("text", x = 1.5, y = 10300, label = "DC: -7.43%", color = "#3A5FCD", hjust = 0) +
-  annotate("text", x = 1, y = 3000, label = "DC: -12.64%", color = "red", hjust = 0)
-
-Yc_plot
-
-```
-
-A graph was created showing the relative yield loss (%) as a function of disease severity.
-
-```{r}
-# Definitions of the mean DCs (as you already noted)
-dc_high <- -7.43   # %
-dc_low  <- -12.64  # %
-
-# Sequence of severity
-sev_seq <- 0:5
-
-# Create dataframe for plotting
-df_rel <- tibble(
-  sev = rep(sev_seq, 2),
-  DC  = c(dc_low * sev_seq, dc_high * sev_seq),   # cumulative loss
-  prod_class = rep(c("Low", "High"), each = length(sev_seq))
-)
-
-# Relative plot
-DC_plot <- ggplot(df_rel, aes(x = sev, y = DC, color = prod_class)) +
-  geom_line(size = 1.5) +
-  geom_point(size = 3) +
-  scale_color_manual(values = c("Low" = "red", "High" = "#3A5FCD")) +
-  scale_x_continuous(breaks = 0:5, limits = c(0, 5)) +
-  labs(
-    x = "Scale score -1",
-    y = "Relative Yield Loss (%)",
-    color = "Yield class"
-  ) +
-  theme_bw(base_size = 18) +
-  theme(
-    legend.position = "top",
-    axis.text.x = element_text(size = 16),
-    axis.text.y = element_text(size = 16)
-  ) +
-  annotate("text", x = 5, y = dc_high*5, 
-           label = paste0("Max RYL: ", dc_high*5, "%"), color = "#3A5FCD", hjust = 1, vjust = -5) +
-  annotate("text", x = 5, y = dc_low*5, 
-           label = paste0("Max RYL: ", dc_low*5, "%"), color = "red", hjust = 1.4, vjust = 0.1)
-
-DC_plot
-
-```
-
-Due to the observed difference, we investigated whether plants from different yield classes exhibited distinct severity distributions through a density plot.
-
-```{r}
-den_ydcl <- ggplot(data3, aes(x = sev + 1, fill = prod_class)) +
-  geom_density(alpha = 0.5) +
-  scale_fill_manual(values = c("baixa" = "#ff9688", "alta" = "#3A5FCD"), 
-                     labels = c("baixa" = "Low", "alta" = "High")) +
-  scale_x_continuous(limits = c(1, 6), breaks = seq(1, 6, 1)) +
-  labs(
-    x = "Scale score -1",
-    y = "Density",
-    fill = "Yield Class"
-  ) +
-  theme_bw()
-den_ydcl
 ```
