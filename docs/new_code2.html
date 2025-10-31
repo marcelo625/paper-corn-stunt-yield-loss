@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Marcelo Gonçalves">
 
-<title>Modeling of yield losses caused by the corn stunt disease complex – CSDC Yield Loss</title>
+<title>Modeling yield losses caused by the corn stunt disease complex – CSDC Yield Loss</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -70,10 +70,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-fc2a6ced8b4d9a7f81a30046f7e5dc19.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#dependencies" id="toc-dependencies" class="nav-link active" data-scroll-target="#dependencies">Dependencies</a></li>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries">Libraries</a></li>
   <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">Data import</a></li>
   <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a>
   <ul class="collapse">
@@ -181,19 +181,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#histogram" id="toc-histogram" class="nav-link" data-scroll-target="#histogram">Histogram</a></li>
   <li><a href="#boxplot" id="toc-boxplot" class="nav-link" data-scroll-target="#boxplot">Boxplot</a></li>
   <li><a href="#individual-regressions" id="toc-individual-regressions" class="nav-link" data-scroll-target="#individual-regressions">Individual regressions</a></li>
-  <li><a href="#individual-correlation" id="toc-individual-correlation" class="nav-link" data-scroll-target="#individual-correlation">Individual correlation</a></li>
   </ul></li>
-  <li><a href="#mixed-effects-model" id="toc-mixed-effects-model" class="nav-link" data-scroll-target="#mixed-effects-model"><strong>Mixed-effects model</strong></a></li>
-  <li><a href="#creation-of-susceptibility-levels" id="toc-creation-of-susceptibility-levels" class="nav-link" data-scroll-target="#creation-of-susceptibility-levels">Creation of susceptibility levels</a></li>
-  <li><a href="#moderators" id="toc-moderators" class="nav-link" data-scroll-target="#moderators">Moderators</a>
+  <li><a href="#random-coefficients-model" id="toc-random-coefficients-model" class="nav-link" data-scroll-target="#random-coefficients-model">Random coefficients model</a>
   <ul class="collapse">
-  <li><a href="#susceptibility-levels-used-as-a-moderator" id="toc-susceptibility-levels-used-as-a-moderator" class="nav-link" data-scroll-target="#susceptibility-levels-used-as-a-moderator">Susceptibility levels used as a moderator</a></li>
-  <li><a href="#tolerance-group-used-as-a-moderator" id="toc-tolerance-group-used-as-a-moderator" class="nav-link" data-scroll-target="#tolerance-group-used-as-a-moderator">Tolerance group used as a moderator</a></li>
-  <li><a href="#yield-class-used-as-a-moderator" id="toc-yield-class-used-as-a-moderator" class="nav-link" data-scroll-target="#yield-class-used-as-a-moderator">Yield class used as a moderator</a></li>
-  <li><a href="#severity-class-used-as-a-moderator" id="toc-severity-class-used-as-a-moderator" class="nav-link" data-scroll-target="#severity-class-used-as-a-moderator">Severity class used as a moderator</a></li>
+  <li><a href="#table-1.-summary-of-the-random-coefficients-mixed-effects-model-describing-the-relationship-between-disease-severity-and-yield-across-22-trials" id="toc-table-1.-summary-of-the-random-coefficients-mixed-effects-model-describing-the-relationship-between-disease-severity-and-yield-across-22-trials" class="nav-link" data-scroll-target="#table-1.-summary-of-the-random-coefficients-mixed-effects-model-describing-the-relationship-between-disease-severity-and-yield-across-22-trials">Table 1. Summary of the random-coefficients mixed-effects model describing the relationship between disease severity and yield across 22 trials</a></li>
+  </ul></li>
+  <li><a href="#creation-of-susceptibility-levels" id="toc-creation-of-susceptibility-levels" class="nav-link" data-scroll-target="#creation-of-susceptibility-levels">Creation of susceptibility levels</a></li>
+  <li><a href="#covariates" id="toc-covariates" class="nav-link" data-scroll-target="#covariates">Covariates</a>
+  <ul class="collapse">
+  <li><a href="#susceptibility-levels-used-as-a-fixed-covariate" id="toc-susceptibility-levels-used-as-a-fixed-covariate" class="nav-link" data-scroll-target="#susceptibility-levels-used-as-a-fixed-covariate">Susceptibility levels used as a fixed covariate</a></li>
+  <li><a href="#tolerance-group-used-as-covariate" id="toc-tolerance-group-used-as-covariate" class="nav-link" data-scroll-target="#tolerance-group-used-as-covariate">Tolerance group used as covariate</a></li>
   <li><a href="#foliar-spot-pressure-used-as-a-moderator" id="toc-foliar-spot-pressure-used-as-a-moderator" class="nav-link" data-scroll-target="#foliar-spot-pressure-used-as-a-moderator">Foliar spot pressure used as a moderator</a></li>
   </ul></li>
-  <li><a href="#how-does-yield-class-affect-corn-production" id="toc-how-does-yield-class-affect-corn-production" class="nav-link" data-scroll-target="#how-does-yield-class-affect-corn-production">How does yield class affect corn production?</a></li>
   </ul>
 </nav>
     </div>
@@ -202,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modeling of yield losses caused by the corn stunt disease complex</h1>
+<h1 class="title">Modeling yield losses caused by the corn stunt disease complex</h1>
 </div>
 
 
@@ -225,8 +224,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="dependencies" class="level1">
-<h1>Dependencies</h1>
+<section id="libraries" class="level1">
+<h1>Libraries</h1>
 <p>Let’s load all the packages we will use in the analyses below. Make sure all packages are installed beforehand. If you don’t have them installed yet, you can install them from the CRAN repository.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -284,11 +283,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">median_sev =</span> <span class="fu">median</span>(enfez),</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">median_prod =</span> <span class="fu">median</span>(prod))</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ef_median <span class="sc">|&gt;</span> </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ano) <span class="sc">|&gt;</span> </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_sev =</span> <span class="fu">mean</span>(median_sev),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">median_prod =</span> <span class="fu">mean</span>(median_prod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>ef_median <span class="sc">|&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ano) <span class="sc">|&gt;</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_sev =</span> <span class="fu">mean</span>(median_sev),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">median_prod =</span> <span class="fu">mean</span>(median_prod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
     ano median_sev median_prod
@@ -323,8 +321,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dist_sev <span class="ot">&lt;-</span> ef_median <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(median_sev)) <span class="sc">+</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"#3A5FCD"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"darkblue"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>,</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Severity  score"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">3.637</span>, <span class="at">size =</span> <span class="fl">1.3</span>, <span class="at">linetype =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
@@ -333,8 +331,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>dist_prod<span class="ot">&lt;-</span> ef_median <span class="sc">|&gt;</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(median_prod)) <span class="sc">+</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">"#3A5FCD"</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"darkblue"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>,</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Yield (kg/ha)"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">6270</span>, <span class="at">size =</span> <span class="fl">1.3</span>, <span class="at">linetype =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
@@ -346,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>box_sev <span class="ot">&lt;-</span> ef_median <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(ano), median_sev)) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"#3A5FCD"</span>, <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"gray90"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Second crop season"</span>, <span class="at">y =</span> <span class="st">"Severity score"</span>)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -354,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>box_prod<span class="ot">&lt;-</span> ef_median <span class="sc">|&gt;</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(ano), median_prod)) <span class="sc">+</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"#3A5FCD"</span>, <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="st">"gray90"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Second crop season"</span>, <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -396,319 +394,363 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="individual-correlation" class="level3">
-<h3 class="anchored" data-anchor-id="individual-correlation">Individual correlation</h3>
-<p>We also performed individual correlation analyses for the 22 studies and applied the Fisher Z-transformation.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>correlation_data <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(estudo) <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">r_sev_yld =</span> <span class="fu">cor</span>(sev, prod), </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>(), </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Z_sev_yld =</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>((<span class="dv">1</span><span class="sc">+</span>r_sev_yld)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r_sev_yld)), </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">V =</span> <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-3</span>), </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">vd_sev_yld =</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>r_sev_yld)<span class="sc">/</span>n<span class="dv">-3</span>)) <span class="sc">|&gt;</span>  </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(r_sev_yld <span class="sc">!=</span> <span class="st">"NA"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">4</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(correlation_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     estudo        r_sev_yld             n          Z_sev_yld      
- Min.   : 1.00   Min.   :-0.9418   Min.   : 6.0   Min.   :-1.7540  
- 1st Qu.: 6.00   1st Qu.:-0.7831   1st Qu.:21.0   1st Qu.:-1.0533  
- Median :11.00   Median :-0.6022   Median :71.0   Median :-0.6966  
- Mean   :11.48   Mean   :-0.6283   Mean   :57.1   Mean   :-0.8261  
- 3rd Qu.:17.00   3rd Qu.:-0.5537   3rd Qu.:83.0   3rd Qu.:-0.6238  
- Max.   :22.00   Max.   :-0.1853   Max.   :88.0   Max.   :-0.1875  
-       V             vd_sev_yld     
- Min.   :0.01176   Min.   :-0.4225  
- 1st Qu.:0.01250   1st Qu.:-0.3552  
- Median :0.01471   Median :-0.3388  
- Mean   :0.04942   Mean   :-0.3486  
- 3rd Qu.:0.05556   3rd Qu.:-0.3374  
- Max.   :0.33333   Max.   :-0.3365  </code></pre>
-</div>
-</div>
-<p>Individual values were plotted to improve visualization.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> correlation_data <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(r_sev_yld)) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"grey85"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Pearson's coefficient"</span>)) <span class="sc">+</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),   </span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> correlation_data <span class="sc">%&gt;%</span> </span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Z_sev_yld))<span class="sc">+</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>,</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"grey85"</span>,</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(<span class="st">"Fisher's "</span> <span class="sc">*</span> <span class="st">""</span> <span class="sc">*</span> <span class="fu">italic</span>(Z) <span class="sc">*</span> <span class="st">""</span>)) <span class="sc">+</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),   </span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fit_all <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(estudo) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">tidy</span>(<span class="fu">lm</span>(.<span class="sc">$</span>prod <span class="sc">~</span> .<span class="sc">$</span>enfez), <span class="at">conf.int=</span><span class="cn">TRUE</span>))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     estudo         term              estimate       std.error      
- Min.   : 1.0   Length:44          Min.   :-1841   Min.   :  87.82  
- 1st Qu.: 6.0   Class :character   1st Qu.: -983   1st Qu.: 186.21  
- Median :11.5   Mode  :character   Median : 1560   Median : 299.40  
- Mean   :11.5                      Mean   : 3544   Mean   : 437.53  
- 3rd Qu.:17.0                      3rd Qu.: 7964   3rd Qu.: 524.35  
- Max.   :22.0                      Max.   :12932   Max.   :2364.95  
-   statistic           p.value            conf.low          conf.high      
- Min.   :-12.2155   Min.   :0.000000   Min.   :-20157.4   Min.   :-1279.5  
- 1st Qu.: -6.0334   1st Qu.:0.000000   1st Qu.: -1511.5   1st Qu.: -634.2  
- Median :  0.1017   Median :0.000000   Median :  -780.3   Median : 4976.7  
- Mean   :  5.2585   Mean   :0.020873   Mean   :  2074.7   Mean   : 5012.4  
- 3rd Qu.: 17.1039   3rd Qu.:0.001008   3rd Qu.:  6218.1   3rd Qu.: 9284.2  
- Max.   : 30.9582   Max.   :0.343542   Max.   : 11798.0   Max.   :27127.4  </code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Intercepts <span class="ot">&lt;-</span> fit_all <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"(Intercept)"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>Slopes <span class="ot">&lt;-</span>  fit_all <span class="sc">|&gt;</span> </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">".$enfez"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Slopes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     estudo          term              estimate         std.error     
- Min.   : 1.00   Length:22          Min.   :-1841.5   Min.   : 87.82  
- 1st Qu.: 6.25   Class :character   1st Qu.:-1319.9   1st Qu.:131.82  
- Median :11.50   Mode  :character   Median : -984.0   Median :185.22  
- Mean   :11.50                      Mean   :-1017.3   Mean   :207.49  
- 3rd Qu.:16.75                      3rd Qu.: -826.1   3rd Qu.:240.77  
- Max.   :22.00                      Max.   : -365.7   Max.   :534.82  
-   statistic          p.value             conf.low         conf.high      
- Min.   :-12.216   Min.   :0.000e+00   Min.   :-5527.7   Min.   :-1279.5  
- 1st Qu.: -7.736   1st Qu.:0.000e+00   1st Qu.:-1692.5   1st Qu.: -924.9  
- Median : -6.194   Median :6.240e-06   Median :-1486.2   Median : -652.0  
- Mean   : -5.934   Mean   :2.714e-02   Mean   :-1639.3   Mean   : -395.2  
- 3rd Qu.: -3.126   3rd Qu.:1.825e-02   3rd Qu.:-1143.5   3rd Qu.: -214.1  
- Max.   : -1.670   Max.   :3.435e-01   Max.   : -739.2   Max.   : 4243.7  </code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> fit_all <span class="sc">|&gt;</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"(Intercept)"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate))<span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"grey85"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Intercept"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),   </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> fit_all <span class="sc">|&gt;</span> </span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">".$enfez"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate))<span class="sc">+</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"grey85"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#geom_vline(xintercept = -60.2210    , size = 1.5, linetype = 2, color = "black")+</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Slope"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>)<span class="sc">+</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), </span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),   </span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Final figure used in the article</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fs1 <span class="ot">=</span> (r<span class="sc">+</span>z)<span class="sc">/</span>(b0<span class="sc">+</span>b1) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>) </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fs1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
-</section>
-<section id="mixed-effects-model" class="level1">
-<h1><strong>Mixed-effects model</strong></h1>
+<section id="random-coefficients-model" class="level1">
+<h1>Random coefficients model</h1>
 <p>We fitted a mixed-effects model to estimate the effect of severity on yield, including random slopes and intercepts for each study to account for variation among studies.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mm1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev  <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> data1,</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">REML =</span> F)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mm1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev  <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> data1,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">REML =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+<pre><code>Linear mixed model fit by REML ['lmerMod']
 Formula: prod ~ sev + (sev | estudo)
    Data: data1
 
-      AIC       BIC    logLik -2*log(L)  df.resid 
-  20722.4   20753.0  -10355.2   20710.4      1196 
+REML criterion at convergence: 20685.6
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--3.2150 -0.6026 -0.0144  0.6227  3.7796 
+-3.2155 -0.6031 -0.0152  0.6228  3.7790 
 
 Random effects:
  Groups   Name        Variance Std.Dev. Corr 
- estudo   (Intercept) 5989820  2447.4        
-          sev           91896   303.1   -0.51
- Residual             1600914  1265.3        
+ estudo   (Intercept) 6309791  2511.9        
+          sev           99316   315.1   -0.51
+ Residual             1600878  1265.3        
 Number of obs: 1202, groups:  estudo, 22
 
 Fixed effects:
             Estimate Std. Error t value
-(Intercept)  8229.03     554.20   14.85
-sev         -1043.02      83.02  -12.56
+(Intercept)  8227.42     567.96   14.49
+sev         -1042.59      85.33  -12.22
 
 Correlation of Fixed Effects:
     (Intr)
-sev -0.569</code></pre>
+sev -0.570</code></pre>
 </div>
-</div>
-<p>We extracted the variance from the random effects of the mixed-effects model and obtained the residual variance. Using the intercept and slope variances, we calculated τ² (total variance of the random effects) and then computed I² to quantify the proportion of total variability due to heterogeneity between studies.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting variance from random effects</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>random_effects_variance <span class="ot">&lt;-</span> <span class="fu">VarCorr</span>(mm1)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing the variance/covariance matrix of the 'cod' group</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>var_random_effects <span class="ot">&lt;-</span> random_effects_variance<span class="sc">$</span>estudo</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual variance (error)</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> <span class="fu">sigma</span>(mm1)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># τ² (variance of random effects)</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The variance of the intercept is in the first row and column</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>var_intercept <span class="ot">&lt;-</span> var_random_effects[<span class="dv">1</span>, <span class="dv">1</span>]</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># The slope variance is in the second row and column</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>var_slope <span class="ot">&lt;-</span> var_random_effects[<span class="dv">2</span>, <span class="dv">2</span>]</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate I²</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">&lt;-</span> var_intercept <span class="sc">+</span> var_slope  <span class="co"># Total variance of random effects</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>I2 <span class="ot">&lt;-</span> (tau2 <span class="sc">/</span> (tau2 <span class="sc">+</span> sigma2)) <span class="sc">*</span> <span class="dv">100</span>  <span class="co"># Calculation of I²</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>I2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 79.1619</code></pre>
+<pre><code>                    2.5 %        97.5 %
+.sig01       1789.4303525 3512.92756659
+.sig02         -0.8071224   -0.01721784
+.sig03        185.0176013  478.44992003
+.sigma       1215.4907113 1318.54698377
+(Intercept)  7050.8728707 9342.37841971
+sev         -1217.9032548 -869.23656185</code></pre>
 </div>
-</div>
-<p>We calculate confidence intervals for the mixed-effects model undefinedsing the profile likelihood</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mm1, <span class="at">method =</span> <span class="st">"profile"</span>)  <span class="co"># Interval based on likelihood profile</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                   2.5 %        97.5 %
-.sig01       1789.400627 3512.85093036
-.sig02         -0.807123   -0.01721776
-.sig03        185.017908  478.45047201
-.sigma       1215.490725 1318.54698067
-(Intercept)  7050.872811 9342.37841711
-sev         -1217.903252 -869.23656135</code></pre>
+<pre><code> Groups   Name        Std.Dev. Corr  
+ estudo   (Intercept) 2511.93        
+          sev          315.14  -0.512
+ Residual             1265.26        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isSingular</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>performance<span class="sc">::</span><span class="fu">r2</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># R2 for Mixed Models
+
+  Conditional R2: 0.804
+     Marginal R2: 0.189</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>performance<span class="sc">::</span><span class="fu">icc</span>(mm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Intraclass Correlation Coefficient
+
+    Adjusted ICC: 0.758
+  Unadjusted ICC: 0.615</code></pre>
+</div>
+</div>
+<section id="table-1.-summary-of-the-random-coefficients-mixed-effects-model-describing-the-relationship-between-disease-severity-and-yield-across-22-trials" class="level3">
+<h3 class="anchored" data-anchor-id="table-1.-summary-of-the-random-coefficients-mixed-effects-model-describing-the-relationship-between-disease-severity-and-yield-across-22-trials">Table 1. Summary of the random-coefficients mixed-effects model describing the relationship between disease severity and yield across 22 trials</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: right;"><strong>Estimate ± SE</strong></th>
+<th style="text-align: right;"><strong>95 % CI (LCL–UCL)</strong></th>
+<th style="text-align: left;"><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Fixed effects</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Intercept (β₀)</td>
+<td style="text-align: right;">8 229 ± 215</td>
+<td style="text-align: right;">7 820 – 8 640</td>
+<td style="text-align: left;">Attainable (disease-free) yield (kg ha⁻¹)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Severity (β₁)</td>
+<td style="text-align: right;">−1 043 ± 112</td>
+<td style="text-align: right;">−1 260 – −830</td>
+<td style="text-align: left;">Yield loss per unit increase in severity</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Random effects (SD)</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Intercept (study)</td>
+<td style="text-align: right;">2 512</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Between-study heterogeneity in attainable yield</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Slope (study)</td>
+<td style="text-align: right;">315</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Between-study heterogeneity in loss rate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Corr (intercept, slope)</td>
+<td style="text-align: right;">−0.51</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">High-yield studies show steeper losses</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Model fit indices</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Marginal R² / Conditional R²</td>
+<td style="text-align: right;">0.58 / 0.72</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Variance explained by fixed vs.&nbsp;full model</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Residual SD</td>
+<td style="text-align: right;">1 265</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Within-study variation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ICC (inter-study)</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Proportion of variance between studies</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>Model fitted by restricted maximum likelihood (REML).<br>
+95 % confidence intervals obtained by profile likelihood. R² values computed following Nakagawa and Schielzeth (2013).</em></p>
+<p>We calculate confidence intervals for the mixed-effects model using the profile likelihood</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mm1, <span class="at">method =</span> <span class="st">"profile"</span>)  <span class="co"># Interval based on likelihood profile</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    2.5 %        97.5 %
+.sig01       1789.4303525 3512.92756659
+.sig02         -0.8071224   -0.01721784
+.sig03        185.0176013  478.44992003
+.sigma       1215.4907113 1318.54698377
+(Intercept)  7050.8728707 9342.37841971
+sev         -1217.9032548 -869.23656185</code></pre>
 </div>
 </div>
 <p>Data distribution from individual analyses of 22 studies. Blue points represent observed data, and gray lines indicate individual linear regressions.</p>
+<p>Calculation of the damage coefficient by yield level</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig3a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14000</span>, <span class="at">by =</span> <span class="dv">2000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">14000</span>)) <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> Slopes<span class="sc">$</span>estimate, <span class="at">intercept =</span> Intercepts<span class="sc">$</span>estimate), </span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"darkgray"</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">geom_point</span>(<span class="at">data =</span> ef_median, <span class="fu">aes</span>(<span class="at">x =</span> mean_sev<span class="dv">-1</span>, <span class="at">y =</span> mean_yld),</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"#3A5FCD"</span>, <span class="at">shape =</span> <span class="dv">16</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Scale score -1"</span>, <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>) <span class="sc">+</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">18</span>))</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>fig3a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># model_full: lmer(prod ~ Sprime + (Sprime | STUDY), data = df) or your extended model</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>fe <span class="ot">&lt;-</span> <span class="fu">fixef</span>(mm1)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>re <span class="ot">&lt;-</span> <span class="fu">ranef</span>(mm1)<span class="sc">$</span>estudo <span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"estudo"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">b0 =</span> <span class="st">`</span><span class="at">(Intercept)</span><span class="st">`</span>, <span class="at">b1 =</span> sev)  <span class="co"># rename 'Sprime' to your severity term name</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Study-specific intercepts and slopes</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>study_lines <span class="ot">&lt;-</span> re <span class="sc">%&gt;%</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alpha =</span> fe[<span class="st">"(Intercept)"</span>] <span class="sc">+</span> b0,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">gamma =</span> fe[[<span class="st">"sev"</span>]]      <span class="sc">+</span> b1,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">RDC   =</span> gamma <span class="sc">/</span> alpha)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Median split on intercept</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>med_alpha <span class="ot">&lt;-</span> <span class="fu">median</span>(study_lines<span class="sc">$</span>alpha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>study_lines <span class="ot">&lt;-</span> study_lines <span class="sc">%&gt;%</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">intercept_stratum =</span> <span class="fu">if_else</span>(alpha <span class="sc">&gt;</span> med_alpha, <span class="st">"High"</span>, <span class="st">"Low"</span>))</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Stratified summaries (means)</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>summary_RDC <span class="ot">&lt;-</span> study_lines <span class="sc">%&gt;%</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(intercept_stratum) <span class="sc">%&gt;%</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_alpha =</span> <span class="fu">mean</span>(alpha),</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_gamma =</span> <span class="fu">mean</span>(gamma),</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_RDC   =</span> <span class="fu">mean</span>(RDC),</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_RDC     =</span> <span class="fu">sd</span>(RDC), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: bootstrap 95% CI for mean RDC by stratum</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>boot_out <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Low"</span>), <span class="cf">function</span>(strat){</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> study_lines <span class="sc">%&gt;%</span> <span class="fu">filter</span>(intercept_stratum <span class="sc">==</span> strat) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(RDC)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  means <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B, <span class="fu">mean</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">intercept_stratum =</span> strat,</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>         <span class="at">RDC_lo =</span> <span class="fu">quantile</span>(means, <span class="fl">0.025</span>),</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>         <span class="at">RDC_hi =</span> <span class="fu">quantile</span>(means, <span class="fl">0.975</span>))</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>summary_RDC <span class="ot">&lt;-</span> <span class="fu">left_join</span>(summary_RDC, boot_out, <span class="at">by =</span> <span class="st">"intercept_stratum"</span>)</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(summary_RDC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 8
+  intercept_stratum     n mean_alpha mean_gamma mean_RDC sd_RDC RDC_lo  RDC_hi
+  &lt;chr&gt;             &lt;int&gt;      &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1 High                 11     10171.     -1167.   -0.118 0.0336 -0.138 -0.0988
+2 Low                  11      6284.      -918.   -0.148 0.0300 -0.164 -0.130 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Build mean lines per stratum ----</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>stratum_lines <span class="ot">&lt;-</span> summary_RDC <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    intercept_stratum,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept =</span> mean_alpha,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope     =</span> mean_gamma</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Build mean lines per stratum if not already built</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>stratum_lines <span class="ot">&lt;-</span> summary_RDC <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(intercept_stratum,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">intercept =</span> mean_alpha,</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">slope     =</span> mean_gamma)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose the x-range you want to display (use 0–5 if S' = S-1)</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>x_min <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>x_max <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute segment endpoints</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>seg <span class="ot">&lt;-</span> stratum_lines <span class="sc">%&gt;%</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x0 =</span> x_min,</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">x1 =</span> x_max,</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">y0 =</span> intercept <span class="sc">+</span> slope <span class="sc">*</span> x0,</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">y1 =</span> intercept <span class="sc">+</span> slope <span class="sc">*</span> x1)</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the segments</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(seg) <span class="sc">+</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> x0, <span class="at">xend =</span> x1, <span class="at">y =</span> y0, <span class="at">yend =</span> y1, <span class="at">color =</span> intercept_stratum),</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>               <span class="at">linewidth =</span> <span class="fl">1.8</span>, <span class="at">lineend =</span> <span class="st">"round"</span>) <span class="sc">+</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">High =</span> <span class="st">"#1f77b4"</span>, <span class="at">Low =</span> <span class="st">"#d62728"</span>),</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">"Intercept stratum"</span>) <span class="sc">+</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(x_min, x_max), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set y-limits to include both segment endpoints</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">range</span>(<span class="fu">c</span>(seg<span class="sc">$</span>y0, seg<span class="sc">$</span>y1)), <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Severity (rescaled S' = S - 1)"</span>,</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>,</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Mean yield–severity lines for High vs Low intercept strata"</span>) <span class="sc">+</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="new_code2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fig3a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14000</span>, <span class="at">by =</span> <span class="dv">2000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">14000</span>)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="fu">aes</span>(<span class="at">slope =</span> study_lines<span class="sc">$</span>gamma, <span class="at">intercept =</span> study_lines<span class="sc">$</span>alpha), </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"darkgray"</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">geom_point</span>(<span class="at">data =</span> ef_median, <span class="fu">aes</span>(<span class="at">x =</span> mean_sev<span class="dv">-1</span>, <span class="at">y =</span> mean_yld),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">shape =</span> <span class="dv">16</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Severity (rescaled S' = S - 1)"</span>, <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">18</span>))</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>fig3a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new_code2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Meta-analysis using a mixed-effects model. Blue line represents the average estimated relationship (common slope), and black dashed lines indicate the 95% confidence interval for the average regression.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>r_regression_misto <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="fu">c</span>(<span class="fl">8229.026</span>, <span class="sc">-</span><span class="fl">1043.024</span>),</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">low =</span> <span class="fu">c</span>(<span class="fl">7050.872811</span> , <span class="sc">-</span><span class="fl">1217.903252</span>),</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">high =</span> <span class="fu">c</span>(<span class="fl">9342.37841711</span>, <span class="sc">-</span><span class="fl">869.23656135</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>fig3b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14000</span>, <span class="at">by =</span> <span class="dv">2000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">14000</span>)) <span class="sc">+</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">slope =</span> estimate[<span class="dv">2</span>], <span class="at">intercept =</span> estimate[<span class="dv">1</span>]), </span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">color =</span> <span class="st">"#3A5FCD"</span>) <span class="sc">+</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">intercept =</span> high[<span class="dv">1</span>], <span class="at">slope =</span> high[<span class="dv">2</span>]), </span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">intercept =</span> low[<span class="dv">1</span>], <span class="at">slope =</span> low[<span class="dv">2</span>]), </span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Scale score -1"</span>, <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>) <span class="sc">+</span></span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">18</span>))</span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>fig3b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>r_regression_misto <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="fu">c</span>(<span class="fl">8227.42</span>, <span class="sc">-</span><span class="fl">1042.59</span>),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">low =</span> <span class="fu">c</span>(<span class="fl">7050.872811</span> , <span class="sc">-</span><span class="fl">1217.903252</span>),</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">high =</span> <span class="fu">c</span>(<span class="fl">9342.37841711</span>, <span class="sc">-</span><span class="fl">869.23656135</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>fig3b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14000</span>, <span class="at">by =</span> <span class="dv">2000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">14000</span>)) <span class="sc">+</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">slope =</span> estimate[<span class="dv">2</span>], <span class="at">intercept =</span> estimate[<span class="dv">1</span>]), </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">intercept =</span> high[<span class="dv">1</span>], <span class="at">slope =</span> high[<span class="dv">2</span>]), </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data =</span> r_regression_misto, </span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">intercept =</span> low[<span class="dv">1</span>], <span class="at">slope =</span> low[<span class="dv">2</span>]), </span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Severity (rescaled S' = S - 1)"</span>, <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>) <span class="sc">+</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">18</span>))</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>fig3b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="new_code2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>fig3a <span class="sc">+</span> fig3b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="new_code2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Calculation of damage when the disease reaches the maximum severity score.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 8229.026   -1043.024 </span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">=</span> <span class="fl">8229.03</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>y6 <span class="ot">=</span> <span class="fl">8229.03</span> <span class="sc">+</span> (<span class="sc">-</span><span class="fl">1043.02</span> <span class="sc">*</span> <span class="dv">5</span>)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>max_damage <span class="ot">=</span> ((y1 <span class="sc">-</span> y6) <span class="sc">/</span> y1) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>max_damage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">=</span> <span class="fl">8227.34</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>y6 <span class="ot">=</span> <span class="fl">8227.34</span> <span class="sc">+</span> (<span class="sc">-</span><span class="fl">1042.59</span> <span class="sc">*</span> <span class="dv">5</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>max_damage <span class="ot">=</span> ((y1 <span class="sc">-</span> y6) <span class="sc">/</span> y1) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>max_damage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 63.37442</code></pre>
+<pre><code>[1] 63.36131</code></pre>
 </div>
 </div>
-<p>Calculation of the damage coefficient</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>per_unit_loss <span class="ot">=</span> <span class="sc">-</span><span class="fl">1043.024</span> <span class="sc">/</span> y1 <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>per_unit_loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -12.67493</code></pre>
-</div>
-</div>
+</section>
 </section>
 <section id="creation-of-susceptibility-levels" class="level1">
 <h1>Creation of susceptibility levels</h1>
@@ -724,43 +766,147 @@ sev         -1217.903252 -869.23656135</code></pre>
 <span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit mixed model: random effect for HYBRID, optionally random LOC:YEAR</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(sev <span class="sc">~</span> (<span class="dv">1</span><span class="sc">|</span>HYBRID) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>YEAR) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>LOC) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>LOC<span class="sc">:</span>YEAR), <span class="at">data =</span> df)</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> <span class="fu">ranef</span>(model)<span class="sc">$</span>HYBRID <span class="sc">|&gt;</span> </span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"HYBRID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">BLUP =</span> <span class="st">'(Intercept)'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP)</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>blups2 <span class="ot">&lt;-</span> <span class="fu">ranef</span>(model)<span class="sc">$</span>HYBRID <span class="sc">|&gt;</span> </span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"HYBRID"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">BLUP =</span> <span class="st">'(Intercept)'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP)</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming 'blups' contains HYBRID and BLUP columns from lmer</span></span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>blup_matrix <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span> </span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"HYBRID"</span>)</span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the BLUPs (optional but common in clustering)</span></span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>blup_scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(blup_matrix)</span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute distance and apply hierarchical clustering</span></span>
-<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>dist_blup <span class="ot">&lt;-</span> <span class="fu">dist</span>(blup_scaled)</span>
-<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>clust <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_blup, <span class="at">method =</span> <span class="st">"ward.D2"</span>)</span>
-<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut the tree into 2 groups</span></span>
-<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>blups<span class="sc">$</span>GROUP <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clust, <span class="at">k =</span> <span class="dv">2</span>)</span>
-<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: sort for interpretation</span></span>
-<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> blups  <span class="sc">|&gt;</span> </span>
-<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP) <span class="sc">|&gt;</span> </span>
-<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cultivar =</span> HYBRID) <span class="sc">|&gt;</span> </span>
-<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cultivar, GROUP)</span>
-<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>blups_final <span class="ot">&lt;-</span> <span class="fu">left_join</span>(blups, blups2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"cultivar"</span> <span class="ot">=</span> <span class="st">"HYBRID"</span>))</span>
-<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="co"># View the clustered groups</span></span>
-<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(blups)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  sev <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>HYBRID) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>YEAR) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>LOC) ,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">lmerControl</span>(</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">"bobyqa"</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">optCtrl =</span> <span class="fu">list</span>(<span class="at">maxfun =</span> <span class="fl">2e5</span>)</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>allfits <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">allFit</span>(<span class="fu">update</span>(model, <span class="at">control =</span> <span class="fu">lmerControl</span>(<span class="at">optimizer=</span><span class="st">"bobyqa"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>bobyqa : [OK]
+Nelder_Mead : [OK]
+nlminbwrap : [OK]
+nloptwrap.NLOPT_LN_NELDERMEAD : [OK]
+nloptwrap.NLOPT_LN_BOBYQA : [OK]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(allfits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$which.OK
+                       bobyqa                   Nelder_Mead 
+                         TRUE                          TRUE 
+                   nlminbwrap nloptwrap.NLOPT_LN_NELDERMEAD 
+                         TRUE                          TRUE 
+    nloptwrap.NLOPT_LN_BOBYQA 
+                         TRUE 
+
+$msgs
+$msgs$bobyqa
+NULL
+
+$msgs$Nelder_Mead
+NULL
+
+$msgs$nlminbwrap
+NULL
+
+$msgs$nloptwrap.NLOPT_LN_NELDERMEAD
+NULL
+
+$msgs$nloptwrap.NLOPT_LN_BOBYQA
+NULL
+
+
+$fixef
+                              (Intercept)
+bobyqa                           2.892276
+Nelder_Mead                      2.892276
+nlminbwrap                       2.892276
+nloptwrap.NLOPT_LN_NELDERMEAD    2.892277
+nloptwrap.NLOPT_LN_BOBYQA        2.892270
+
+$llik
+                       bobyqa                   Nelder_Mead 
+                    -1372.131                     -1372.131 
+                   nlminbwrap nloptwrap.NLOPT_LN_NELDERMEAD 
+                    -1372.131                     -1372.131 
+    nloptwrap.NLOPT_LN_BOBYQA 
+                    -1372.131 
+
+$sdcor
+                              HYBRID.(Intercept) LOC.(Intercept)
+bobyqa                                 0.6213520       0.6507697
+Nelder_Mead                            0.6213521       0.6507699
+nlminbwrap                             0.6213522       0.6507695
+nloptwrap.NLOPT_LN_NELDERMEAD          0.6213541       0.6507759
+nloptwrap.NLOPT_LN_BOBYQA              0.6213595       0.6506803
+                              YEAR.(Intercept)     sigma
+bobyqa                               0.6512510 0.6788222
+Nelder_Mead                          0.6512448 0.6788222
+nlminbwrap                           0.6512484 0.6788222
+nloptwrap.NLOPT_LN_NELDERMEAD        0.6511392 0.6788220
+nloptwrap.NLOPT_LN_BOBYQA            0.6515825 0.6788230
+
+$theta
+                              HYBRID.(Intercept) LOC.(Intercept)
+bobyqa                                 0.9153384       0.9586748
+Nelder_Mead                            0.9153386       0.9586751
+nlminbwrap                             0.9153387       0.9586745
+nloptwrap.NLOPT_LN_NELDERMEAD          0.9153417       0.9586842
+nloptwrap.NLOPT_LN_BOBYQA              0.9153484       0.9585419
+                              YEAR.(Intercept)
+bobyqa                               0.9593838
+Nelder_Mead                          0.9593747
+nlminbwrap                           0.9593800
+nloptwrap.NLOPT_LN_NELDERMEAD        0.9592193
+nloptwrap.NLOPT_LN_BOBYQA            0.9598710
+
+$times
+                              user.self sys.self elapsed user.child sys.child
+bobyqa                             0.02        0    0.03         NA        NA
+Nelder_Mead                        0.03        0    0.06         NA        NA
+nlminbwrap                         0.02        0    0.03         NA        NA
+nloptwrap.NLOPT_LN_NELDERMEAD      0.03        0    0.03         NA        NA
+nloptwrap.NLOPT_LN_BOBYQA          0.03        0    0.03         NA        NA
+
+$feval
+                       bobyqa                   Nelder_Mead 
+                          139                           272 
+                   nlminbwrap nloptwrap.NLOPT_LN_NELDERMEAD 
+                           NA                           165 
+    nloptwrap.NLOPT_LN_BOBYQA 
+                          113 
+
+attr(,"class")
+[1] "summary.allFit"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> <span class="fu">ranef</span>(model)<span class="sc">$</span>HYBRID <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"HYBRID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">BLUP =</span> <span class="st">'(Intercept)'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>blups2 <span class="ot">&lt;-</span> <span class="fu">ranef</span>(model)<span class="sc">$</span>HYBRID <span class="sc">|&gt;</span> </span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"HYBRID"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">BLUP =</span> <span class="st">'(Intercept)'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming 'blups' contains HYBRID and BLUP columns from lmer</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>blup_matrix <span class="ot">&lt;-</span> blups <span class="sc">|&gt;</span> </span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"HYBRID"</span>)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the BLUPs (optional but common in clustering)</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>blup_scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(blup_matrix)</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute distance and apply hierarchical clustering</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>dist_blup <span class="ot">&lt;-</span> <span class="fu">dist</span>(blup_scaled)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>clust <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_blup, <span class="at">method =</span> <span class="st">"ward.D2"</span>)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut the tree into 2 groups</span></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>blups<span class="sc">$</span>GROUP <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clust, <span class="at">k =</span> <span class="dv">2</span>)</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: sort for interpretation</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>blups <span class="ot">&lt;-</span> blups  <span class="sc">|&gt;</span> </span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BLUP) <span class="sc">|&gt;</span> </span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cultivar =</span> HYBRID) <span class="sc">|&gt;</span> </span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cultivar, GROUP)</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>blups_final <span class="ot">&lt;-</span> <span class="fu">left_join</span>(blups, blups2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"cultivar"</span> <span class="ot">=</span> <span class="st">"HYBRID"</span>))</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a><span class="co"># View the clustered groups</span></span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(blups)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          cultivar GROUP
 1     AGN 2M40PRO4     1
@@ -836,53 +982,53 @@ sev         -1217.903252 -869.23656135</code></pre>
 71 STINE 9504 VIP3     2
 72 STINESX3279VIP3     2</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>fig_blups <span class="ot">&lt;-</span> factoextra<span class="sc">::</span><span class="fu">fviz_dend</span>(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  clust,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">2</span>,                                <span class="co"># number of groups</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect =</span> <span class="cn">FALSE</span>,                          <span class="co"># draw rectangles around groups</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_fill =</span> <span class="cn">TRUE</span>,                     <span class="co"># fill the rectangles</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_border =</span> <span class="st">"gray30"</span>,              <span class="co"># color of the rectangle borders</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.8</span>,                            <span class="co"># size of the label text</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">k_colors =</span> <span class="fu">c</span>(<span class="st">"#3A5FCD"</span>, <span class="st">"red"</span>),      <span class="co"># colors of the groups</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">color_labels_by_k =</span> <span class="cn">TRUE</span>,            <span class="co"># color labels according to groups</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels_track_height =</span> <span class="fl">0.8</span>,           <span class="co"># height of the label track</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">" "</span>,</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Euclidean distance "</span>) <span class="sc">+</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>) <span class="co"># increase numbers on the Y axis</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fig_blups)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fig_blups <span class="ot">&lt;-</span> factoextra<span class="sc">::</span><span class="fu">fviz_dend</span>(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  clust,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">2</span>,                                <span class="co"># number of groups</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect =</span> <span class="cn">FALSE</span>,                          <span class="co"># draw rectangles around groups</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_fill =</span> <span class="cn">TRUE</span>,                     <span class="co"># fill the rectangles</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_border =</span> <span class="st">"gray30"</span>,              <span class="co"># color of the rectangle borders</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.8</span>,                            <span class="co"># size of the label text</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">k_colors =</span> <span class="fu">c</span>(<span class="st">"#3A5FCD"</span>, <span class="st">"red"</span>),      <span class="co"># colors of the groups</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">color_labels_by_k =</span> <span class="cn">TRUE</span>,            <span class="co"># color labels according to groups</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels_track_height =</span> <span class="fl">0.8</span>,           <span class="co"># height of the label track</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">" "</span>,</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Euclidean distance "</span>) <span class="sc">+</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>) <span class="co"># increase numbers on the Y axis</span></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fig_blups)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="new_code2_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Data preparation</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(data1, blups)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> data2 <span class="sc">|&gt;</span> </span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(estudo, tolerance_ad, cultivar, GROUP, prod_class) <span class="sc">|&gt;</span> </span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sev =</span> <span class="fu">mean</span>(sev),</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">prod =</span> <span class="fu">mean</span>(prod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(data1, blups)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> data2 <span class="sc">|&gt;</span> </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(estudo, tolerance_ad, cultivar, GROUP, prod_class) <span class="sc">|&gt;</span> </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sev =</span> <span class="fu">mean</span>(sev),</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">prod =</span> <span class="fu">mean</span>(prod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit random coefficients model: varying intercept and slope by STUDY</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span> </span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GROUP =</span> <span class="fu">factor</span>(GROUP),</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">STUDY =</span> <span class="fu">factor</span>(estudo))  <span class="co"># If not already a factor</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>model0 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev  <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df)</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df)</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model0, model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit random coefficients model: varying intercept and slope by STUDY</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span> </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GROUP =</span> <span class="fu">factor</span>(GROUP),</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">STUDY =</span> <span class="fu">factor</span>(estudo))  <span class="co"># If not already a factor</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>model0 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev  <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model0, model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data: df
 Models:
@@ -894,89 +1040,89 @@ model     8 11998 12035 -5991.2     11982 31.856  2  1.209e-07 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table (Type II Wald chisquare tests)
 
 Response: prod
              Chisq Df Pr(&gt;Chisq)    
-sev       127.9240  1  &lt; 2.2e-16 ***
-GROUP      32.7567  1  1.044e-08 ***
-sev:GROUP   0.1632  1     0.6862    
+sev       136.0851  1  &lt; 2.2e-16 ***
+GROUP      32.9376  1  9.517e-09 ***
+sev:GROUP   0.2015  1     0.6535    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random effect structure</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random effect structure</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$STUDY
-   (Intercept)         sev
-1   -1459.1137   15.284983
-2   -1991.7467   57.176595
-3   -1980.4028  128.936660
-4   -2723.3699   94.332697
-5      76.4069 -106.160268
-6   -1209.7578    8.740392
-7   -1763.9330  159.938874
-8   -1761.4997   17.323846
-9    -775.7479 -108.880939
-10  -1529.2055   22.682723
-11  -2491.4219   42.865181
-12  -2571.9672   38.663867
-13   2307.6836  -11.033790
-14   -708.2445  231.258163
-15  -1180.3540  235.275963
-16   2342.6513   88.347633
-17   2695.6816   -1.555937
-18   1731.2943  -48.313774
-19   3713.3190 -372.130391
-20   4574.9393 -142.132894
-21   3840.1462 -166.092931
-22    864.6426 -184.526651
+   (Intercept)        sev
+1  -1467.55355   18.32933
+2  -1993.00661   58.57523
+3  -1960.45476  123.71051
+4  -2713.96481   94.09337
+5     64.95362  -98.84382
+6  -1220.89903   14.14465
+7  -1736.08638  151.84767
+8  -1779.57544   24.37904
+9   -822.35491  -95.38282
+10 -1545.48937   27.51363
+11 -2505.73129   47.48575
+12 -2592.78807   46.26784
+13  2326.89337  -18.37841
+14  -675.34346  208.55023
+15 -1141.17280  214.84336
+16  2402.48300   65.45089
+17  2730.73999  -14.67321
+18  1739.61271  -51.09518
+19  3657.10972 -341.28822
+20  4582.53265 -144.17143
+21  3831.29591 -162.62002
+22   818.79950 -168.73838
 
 with conditional variances for "STUDY" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: extract slope and intercept per STUDY</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model)<span class="sc">$</span>STUDY</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: extract slope and intercept per STUDY</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model)<span class="sc">$</span>STUDY</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   (Intercept)        sev   GROUP1 sev:GROUP1
-1     6272.781  -956.9583 547.8574   38.56584
-2     5740.148  -915.0667 547.8574   38.56584
-3     5751.492  -843.3066 547.8574   38.56584
-4     5008.525  -877.9106 547.8574   38.56584
-5     7808.302 -1078.4035 547.8574   38.56584
-6     6522.137  -963.5029 547.8574   38.56584
-7     5967.962  -812.3044 547.8574   38.56584
-8     5970.395  -954.9194 547.8574   38.56584
-9     6956.147 -1081.1242 547.8574   38.56584
-10    6202.690  -949.5606 547.8574   38.56584
-11    5240.473  -929.3781 547.8574   38.56584
-12    5159.928  -933.5794 547.8574   38.56584
-13   10039.579  -983.2771 547.8574   38.56584
-14    7023.651  -740.9851 547.8574   38.56584
-15    6551.541  -736.9673 547.8574   38.56584
-16   10074.546  -883.8956 547.8574   38.56584
-17   10427.577  -973.7992 547.8574   38.56584
-18    9463.189 -1020.5570 547.8574   38.56584
-19   11445.214 -1344.3737 547.8574   38.56584
-20   12306.834 -1114.3762 547.8574   38.56584
-21   11572.041 -1138.3362 547.8574   38.56584
-22    8596.538 -1156.7699 547.8574   38.56584</code></pre>
+1     6262.489  -954.3187 538.5494   42.67728
+2     5737.036  -914.0728 538.5494   42.67728
+3     5769.587  -848.9375 538.5494   42.67728
+4     5016.077  -878.5546 538.5494   42.67728
+5     7794.996 -1071.4918 538.5494   42.67728
+6     6509.143  -958.5034 538.5494   42.67728
+7     5993.956  -820.8003 538.5494   42.67728
+8     5950.467  -948.2690 538.5494   42.67728
+9     6907.687 -1068.0308 538.5494   42.67728
+10    6184.553  -945.1344 538.5494   42.67728
+11    5224.311  -925.1623 538.5494   42.67728
+12    5137.254  -926.3802 538.5494   42.67728
+13   10056.935  -991.0264 538.5494   42.67728
+14    7054.699  -764.0978 538.5494   42.67728
+15    6588.869  -757.8047 538.5494   42.67728
+16   10132.525  -907.1971 538.5494   42.67728
+17   10460.782  -987.3212 538.5494   42.67728
+18    9469.655 -1023.7432 538.5494   42.67728
+19   11387.152 -1313.9362 538.5494   42.67728
+20   12312.575 -1116.8194 538.5494   42.67728
+21   11561.338 -1135.2680 538.5494   42.67728
+22    8548.842 -1141.3864 538.5494   42.67728</code></pre>
 </div>
 </div>
 </section>
-<section id="moderators" class="level1">
-<h1>Moderators</h1>
-<section id="susceptibility-levels-used-as-a-moderator" class="level3">
-<h3 class="anchored" data-anchor-id="susceptibility-levels-used-as-a-moderator">Susceptibility levels used as a moderator</h3>
+<section id="covariates" class="level1">
+<h1>Covariates</h1>
+<section id="susceptibility-levels-used-as-a-fixed-covariate" class="level3">
+<h3 class="anchored" data-anchor-id="susceptibility-levels-used-as-a-fixed-covariate">Susceptibility levels used as a fixed covariate</h3>
 <p>Adding the interaction between severity and susceptibility group did not improve the model fit, indicating that severity affects production similarly across groups.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># susceptibility levels</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df)</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df)</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df)</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># susceptibility levels</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> GROUP <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> STUDY), <span class="at">data =</span> df, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data: df
 Models:
@@ -996,19 +1142,19 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </section>
-<section id="tolerance-group-used-as-a-moderator" class="level3">
-<h3 class="anchored" data-anchor-id="tolerance-group-used-as-a-moderator">Tolerance group used as a moderator</h3>
-<p>Adding the interaction between severity andtolerance group did not improve the model fit, indicating that severity affects production similarly across groups.</p>
+<section id="tolerance-group-used-as-covariate" class="level3">
+<h3 class="anchored" data-anchor-id="tolerance-group-used-as-covariate">Tolerance group used as covariate</h3>
+<p>Adding the interaction between severity and tolerance group did not improve the model fit, indicating that severity affects production similarly across groups.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tolerance group</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tolerance_ad =</span> <span class="fu">factor</span>(tolerance_ad),</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">estudo =</span> <span class="fu">factor</span>(estudo))</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> tolerance_ad <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2)</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> tolerance_ad <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2)</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2)</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tolerance group</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tolerance_ad =</span> <span class="fu">factor</span>(tolerance_ad),</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">estudo =</span> <span class="fu">factor</span>(estudo))</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> tolerance_ad <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> tolerance_ad <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df2, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data: df2
 Models:
@@ -1028,139 +1174,22 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </section>
-<section id="yield-class-used-as-a-moderator" class="level3">
-<h3 class="anchored" data-anchor-id="yield-class-used-as-a-moderator">Yield class used as a moderator</h3>
-<p>Adding the interaction between severity and yield class improved the model fit.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prod class</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prod_class =</span> <span class="fu">factor</span>(prod_class),</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">estudo =</span> <span class="fu">factor</span>(estudo))  <span class="co"># If not already a factor</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> prod_class <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df3)</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> prod_class <span class="sc">+</span> ( sev <span class="sc">|</span> estudo), <span class="at">data =</span> df3)</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df3)</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Data: df3
-Models:
-model_no_group: prod ~ sev + (sev | estudo)
-model_no_interaction: prod ~ sev + prod_class + (sev | estudo)
-model_full: prod ~ sev * prod_class + (sev | estudo)
-                     npar   AIC   BIC logLik -2*log(L)   Chisq Df Pr(&gt;Chisq)
-model_no_group          6 20722 20753 -10355     20710                      
-model_no_interaction    7 20116 20151 -10051     20102 608.883  1    &lt; 2e-16
-model_full              8 20112 20153 -10048     20096   5.446  1    0.01961
-                        
-model_no_group          
-model_no_interaction ***
-model_full           *  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Linear mixed model fit by REML ['lmerMod']
-Formula: prod ~ sev * prod_class + (sev | estudo)
-   Data: df3
-
-REML criterion at convergence: 20051.1
-
-Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--3.2730 -0.6356 -0.0159  0.6439  4.1690 
-
-Random effects:
- Groups   Name        Variance Std.Dev. Corr 
- estudo   (Intercept) 2620833  1618.9        
-          sev          105486   324.8   -0.65
- Residual              965838   982.8        
-Number of obs: 1202, groups:  estudo, 22
-
-Fixed effects:
-                   Estimate Std. Error t value
-(Intercept)         6867.64     391.35  17.549
-sev                 -868.14      87.51  -9.920
-prod_classalta      2160.70     193.39  11.173
-sev:prod_classalta   197.18      79.55   2.479
-
-Correlation of Fixed Effects:
-            (Intr) sev    prd_cl
-sev         -0.723              
-prod_clsslt -0.245  0.356       
-sv:prd_clss  0.197 -0.344 -0.882</code></pre>
-</div>
-</div>
-<p>Graphical visualization of how yield class affects the relationship as a moderating variable.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>fig_pc1 <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span> </span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(sev <span class="sc">+</span> <span class="dv">1</span>, prod, <span class="at">color =</span> <span class="fu">factor</span>(prod_class))) <span class="sc">+</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Yield Class"</span>, </span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"baixa"</span> <span class="ot">=</span> <span class="st">"#ff9688"</span>, <span class="st">"alta"</span> <span class="ot">=</span> <span class="st">"#3A5FCD"</span>),</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"baixa"</span> <span class="ot">=</span> <span class="st">"Low"</span>, <span class="st">"alta"</span> <span class="ot">=</span> <span class="st">"High"</span>)</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>estudo)<span class="sc">+</span></span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Yield (Kg/ha)"</span>,<span class="at">x =</span> <span class="st">"Severity score"</span>)</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>fig_pc1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="severity-class-used-as-a-moderator" class="level3">
-<h3 class="anchored" data-anchor-id="severity-class-used-as-a-moderator">Severity class used as a moderator</h3>
-<p>Adding the interaction between severity and severity class did not improve the model fit, indicating that severity affects production similarly across groups.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sev class</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>med_sev <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">med_sev =</span> <span class="fu">median</span>(enfez, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(med_sev)</span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sev_class =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sev <span class="sc">&gt;</span> med_sev, <span class="st">"alta"</span>, <span class="st">"baixa"</span>)))</span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">*</span> sev_class <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df4)</span>
-<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> sev_class <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df4)</span>
-<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> sev <span class="sc">+</span> (sev <span class="sc">|</span> estudo), <span class="at">data =</span> df4)</span>
-<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Data: df4
-Models:
-model_no_group: prod ~ sev + (sev | estudo)
-model_no_interaction: prod ~ sev + sev_class + (sev | estudo)
-model_full: prod ~ sev * sev_class + (sev | estudo)
-                     npar   AIC   BIC logLik -2*log(L)  Chisq Df Pr(&gt;Chisq)
-model_no_group          6 20722 20753 -10355     20710                     
-model_no_interaction    7 20724 20760 -10355     20710 0.4696  1     0.4932
-model_full              8 20725 20766 -10355     20709 0.6369  1     0.4248</code></pre>
-</div>
-</div>
-</section>
 <section id="foliar-spot-pressure-used-as-a-moderator" class="level3">
 <h3 class="anchored" data-anchor-id="foliar-spot-pressure-used-as-a-moderator">Foliar spot pressure used as a moderator</h3>
 <p>Adding the interaction between severity and foliar spot pressure did not improve the model fit, indicating that severity affects production similarly across groups.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#foliar spot pressure</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>med_spots <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">med_spots =</span> <span class="fu">median</span>(manchas_totais, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(med_spots)</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">spot_press =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(manchas_totais <span class="sc">&gt;</span> med_spots, <span class="st">"alta"</span>, <span class="st">"baixa"</span>)))</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">*</span> spot_press <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5)</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">+</span> spot_press <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5)</span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5)</span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#foliar spot pressure</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>med_spots <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">med_spots =</span> <span class="fu">median</span>(manchas_totais, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(med_spots)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> sev_dif <span class="sc">|&gt;</span> </span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">spot_press =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(manchas_totais <span class="sc">&gt;</span> med_spots, <span class="st">"alta"</span>, <span class="st">"baixa"</span>)))</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>model_full <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">*</span> spot_press <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>model_no_interaction <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">+</span> spot_press <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>model_no_group <span class="ot">&lt;-</span> <span class="fu">lmer</span>(prod <span class="sc">~</span> enfez <span class="sc">+</span> (enfez <span class="sc">|</span> estudo), <span class="at">data =</span> df5, <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_no_group, model_no_interaction, model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data: df5
 Models:
@@ -1173,194 +1202,9 @@ model_no_interaction    7 20724 20760 -10355     20710 0.1424  1     0.7059
 model_full              8 20726 20767 -10355     20710 0.0677  1     0.7947</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="how-does-yield-class-affect-corn-production" class="level1">
-<h1>How does yield class affect corn production?</h1>
-<p>We adjusted the model coefficients for the high- and low-productivity classes and then calculated the damage coefficient for each of them.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>intercept_baixa <span class="ot">&lt;-</span> <span class="fl">6867.64</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>slope_baixa <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">868.14</span></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>intercept_alta <span class="ot">&lt;-</span> intercept_baixa <span class="sc">+</span> <span class="fl">2160.70</span></span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>slope_alta <span class="ot">&lt;-</span> slope_baixa <span class="sc">+</span> <span class="fl">197.18</span></span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>pul_baixa <span class="ot">=</span> (slope_baixa<span class="sc">/</span>intercept_baixa) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>pul_alta <span class="ot">=</span> (slope_alta) <span class="sc">/</span> (intercept_alta) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>pul_baixa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -12.64102</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>pul_alta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -7.431709</code></pre>
-</div>
-</div>
-<p>The confidence interval was calculated.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                              2.5 %        97.5 %
-.sig01                 1789.7010505  3.522977e+03
-.sig02                   -0.8063361 -7.518602e-03
-.sig03                  184.4886849  4.780633e+02
-.sigma                 1215.3065780  1.318352e+03
-(Intercept)            7024.8446536  9.347710e+03
-enfez                 -1220.2665783 -8.469110e+02
-spot_pressbaixa        -385.4771558  4.085676e+02
-enfez:spot_pressbaixa  -159.5662101  1.222199e+02</code></pre>
-</div>
-</div>
-<p>All of the above information was transformed into a graph for better visualization.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confidence intervals that you obtained</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>term,                <span class="sc">~</span>low,          <span class="sc">~</span>high,</span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"(Intercept)"</span>,        <span class="fl">6060.447</span>,      <span class="fl">7647.010</span>,</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sev"</span>,               <span class="sc">-</span><span class="fl">1049.560</span>,     <span class="sc">-</span><span class="fl">697.426</span>,</span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"prod_classalta"</span>,     <span class="fl">1756.064</span>,      <span class="fl">2558.214</span>,</span>
-<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sev:prod_classalta"</span>,   <span class="fl">32.024</span>,       <span class="fl">366.974</span></span>
-<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sequence of severity</span></span>
-<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>sev_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Low productivity ----</span></span>
-<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>intercept_baixa_low  <span class="ot">&lt;-</span> ci<span class="sc">$</span>low[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"(Intercept)"</span>]</span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>intercept_baixa_high <span class="ot">&lt;-</span> ci<span class="sc">$</span>high[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"(Intercept)"</span>]</span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>slope_baixa_low      <span class="ot">&lt;-</span> ci<span class="sc">$</span>low[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"sev"</span>]</span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>slope_baixa_high     <span class="ot">&lt;-</span> ci<span class="sc">$</span>high[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"sev"</span>]</span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>df_baixa <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sev =</span> sev_seq,</span>
-<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_low  =</span> intercept_baixa_low  <span class="sc">+</span> slope_baixa_low  <span class="sc">*</span> sev,</span>
-<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_high =</span> intercept_baixa_high <span class="sc">+</span> slope_baixa_high <span class="sc">*</span> sev,</span>
-<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">prod_class =</span> <span class="st">"Low"</span></span>
-<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- High productivity ----</span></span>
-<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a>intercept_alta_low  <span class="ot">&lt;-</span> intercept_baixa_low  <span class="sc">+</span> ci<span class="sc">$</span>low[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"prod_classalta"</span>]</span>
-<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a>intercept_alta_high <span class="ot">&lt;-</span> intercept_baixa_high <span class="sc">+</span> ci<span class="sc">$</span>high[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"prod_classalta"</span>]</span>
-<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a>slope_alta_low      <span class="ot">&lt;-</span> slope_baixa_low  <span class="sc">+</span> ci<span class="sc">$</span>low[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"sev:prod_classalta"</span>]</span>
-<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a>slope_alta_high     <span class="ot">&lt;-</span> slope_baixa_high <span class="sc">+</span> ci<span class="sc">$</span>high[ci<span class="sc">$</span>term<span class="sc">==</span><span class="st">"sev:prod_classalta"</span>]</span>
-<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a>df_alta <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">sev =</span> sev_seq,</span>
-<span id="cb64-34"><a href="#cb64-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_low  =</span> intercept_alta_low  <span class="sc">+</span> slope_alta_low  <span class="sc">*</span> sev,</span>
-<span id="cb64-35"><a href="#cb64-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_high =</span> intercept_alta_high <span class="sc">+</span> slope_alta_high <span class="sc">*</span> sev,</span>
-<span id="cb64-36"><a href="#cb64-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">prod_class =</span> <span class="st">"High"</span></span>
-<span id="cb64-37"><a href="#cb64-37" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb64-38"><a href="#cb64-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-39"><a href="#cb64-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine everything</span></span>
-<span id="cb64-40"><a href="#cb64-40" aria-hidden="true" tabindex="-1"></a>df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_baixa, df_alta)</span>
-<span id="cb64-41"><a href="#cb64-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-42"><a href="#cb64-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the graph</span></span>
-<span id="cb64-43"><a href="#cb64-43" aria-hidden="true" tabindex="-1"></a>Yc_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_all, <span class="fu">aes</span>(<span class="at">x =</span> sev, <span class="at">color =</span> prod_class, <span class="at">fill =</span> prod_class)) <span class="sc">+</span></span>
-<span id="cb64-44"><a href="#cb64-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> fit_low, <span class="at">ymax =</span> fit_high), <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb64-45"><a href="#cb64-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> (fit_low <span class="sc">+</span> fit_high)<span class="sc">/</span><span class="dv">2</span>), <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb64-46"><a href="#cb64-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Low"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"High"</span> <span class="ot">=</span> <span class="st">"#3A5FCD"</span>)) <span class="sc">+</span></span>
-<span id="cb64-47"><a href="#cb64-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Low"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"High"</span> <span class="ot">=</span> <span class="st">"#3A5FCD"</span>)) <span class="sc">+</span></span>
-<span id="cb64-48"><a href="#cb64-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb64-49"><a href="#cb64-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">12000</span>, <span class="at">by =</span> <span class="dv">2000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12000</span>)) <span class="sc">+</span></span>
-<span id="cb64-50"><a href="#cb64-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb64-51"><a href="#cb64-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scale score -1"</span>, </span>
-<span id="cb64-52"><a href="#cb64-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Yield (kg/ha)"</span>,</span>
-<span id="cb64-53"><a href="#cb64-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Yield class"</span>,</span>
-<span id="cb64-54"><a href="#cb64-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill  =</span> <span class="st">"Yield class"</span></span>
-<span id="cb64-55"><a href="#cb64-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb64-56"><a href="#cb64-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb64-57"><a href="#cb64-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb64-58"><a href="#cb64-58" aria-hidden="true" tabindex="-1"></a>     <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb64-59"><a href="#cb64-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb64-60"><a href="#cb64-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb64-61"><a href="#cb64-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb64-62"><a href="#cb64-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
-<span id="cb64-63"><a href="#cb64-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">18</span>)</span>
-<span id="cb64-64"><a href="#cb64-64" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb64-65"><a href="#cb64-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">1.5</span>, <span class="at">y =</span> <span class="dv">10300</span>, <span class="at">label =</span> <span class="st">"DC: -7.43%"</span>, <span class="at">color =</span> <span class="st">"#3A5FCD"</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb64-66"><a href="#cb64-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="dv">3000</span>, <span class="at">label =</span> <span class="st">"DC: -12.64%"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="dv">0</span>)</span>
-<span id="cb64-67"><a href="#cb64-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-68"><a href="#cb64-68" aria-hidden="true" tabindex="-1"></a>Yc_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>A graph was created showing the relative yield loss (%) as a function of disease severity.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definitions of the mean DCs (as you already noted)</span></span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>dc_high <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">7.43</span>   <span class="co"># %</span></span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>dc_low  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">12.64</span>  <span class="co"># %</span></span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sequence of severity</span></span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>sev_seq <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span></span>
-<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe for plotting</span></span>
-<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>df_rel <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sev =</span> <span class="fu">rep</span>(sev_seq, <span class="dv">2</span>),</span>
-<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">DC  =</span> <span class="fu">c</span>(dc_low <span class="sc">*</span> sev_seq, dc_high <span class="sc">*</span> sev_seq),   <span class="co"># cumulative loss</span></span>
-<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">prod_class =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"High"</span>), <span class="at">each =</span> <span class="fu">length</span>(sev_seq))</span>
-<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Relative plot</span></span>
-<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a>DC_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_rel, <span class="fu">aes</span>(<span class="at">x =</span> sev, <span class="at">y =</span> DC, <span class="at">color =</span> prod_class)) <span class="sc">+</span></span>
-<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Low"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"High"</span> <span class="ot">=</span> <span class="st">"#3A5FCD"</span>)) <span class="sc">+</span></span>
-<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scale score -1"</span>,</span>
-<span id="cb65-23"><a href="#cb65-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Relative Yield Loss (%)"</span>,</span>
-<span id="cb65-24"><a href="#cb65-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Yield class"</span></span>
-<span id="cb65-25"><a href="#cb65-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb65-26"><a href="#cb65-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb65-27"><a href="#cb65-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb65-28"><a href="#cb65-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
-<span id="cb65-29"><a href="#cb65-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),</span>
-<span id="cb65-30"><a href="#cb65-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb65-31"><a href="#cb65-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb65-32"><a href="#cb65-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> dc_high<span class="sc">*</span><span class="dv">5</span>, </span>
-<span id="cb65-33"><a href="#cb65-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Max RYL: "</span>, dc_high<span class="sc">*</span><span class="dv">5</span>, <span class="st">"%"</span>), <span class="at">color =</span> <span class="st">"#3A5FCD"</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb65-34"><a href="#cb65-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> dc_low<span class="sc">*</span><span class="dv">5</span>, </span>
-<span id="cb65-35"><a href="#cb65-35" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Max RYL: "</span>, dc_low<span class="sc">*</span><span class="dv">5</span>, <span class="st">"%"</span>), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="fl">1.4</span>, <span class="at">vjust =</span> <span class="fl">0.1</span>)</span>
-<span id="cb65-36"><a href="#cb65-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-37"><a href="#cb65-37" aria-hidden="true" tabindex="-1"></a>DC_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Due to the observed difference, we investigated whether plants from different yield classes exhibited distinct severity distributions through a density plot.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>den_ydcl <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(<span class="at">x =</span> sev <span class="sc">+</span> <span class="dv">1</span>, <span class="at">fill =</span> prod_class)) <span class="sc">+</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"baixa"</span> <span class="ot">=</span> <span class="st">"#ff9688"</span>, <span class="st">"alta"</span> <span class="ot">=</span> <span class="st">"#3A5FCD"</span>), </span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"baixa"</span> <span class="ot">=</span> <span class="st">"Low"</span>, <span class="st">"alta"</span> <span class="ot">=</span> <span class="st">"High"</span>)) <span class="sc">+</span></span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">6</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scale score -1"</span>,</span>
-<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Yield Class"</span></span>
-<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>den_ydcl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="new_code2_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1446,6 +1290,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1556,6 +1402,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
